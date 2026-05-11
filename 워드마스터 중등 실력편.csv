@@ -1,0 +1,1202 @@
+단원,단어,뜻
+01 단원,kind,"친절한,상냥한"
+01 단원,clever,"영리한,재치 있는"
+01 단원,wise,"지혜로운,슬기로운"
+01 단원,foolish,"바보 같은,어리석은"
+01 단원,proud,"자랑스러워하는,거만한,잘난 체하는"
+01 단원,honest,"정직한,솔직한"
+01 단원,gentle,"부드러운,온화한"
+01 단원,careful,조심성 있는
+01 단원,brave,용감한
+01 단원,lazy,게으른
+01 단원,funny,"웃기는,우스꽝스러운"
+01 단원,calm,"차분한,침착한"
+01 단원,character,"성격,기질"
+01 단원,serious,"진지한,진심의"
+01 단원,strict,"엄한,엄격한"
+01 단원,cruel,"잔인한,무자비한"
+01 단원,mean,"야비한,비열한"
+01 단원,selfish,이기적인
+01 단원,evil,"나쁜,사악한"
+01 단원,curious,"호기심이 많은,알고 싶어하는"
+01 단원,cheerful,"쾌활한,명랑한"
+01 단원,friendly,"친한,다정한,호의적인"
+01 단원,modest,"겸손한,신중한"
+01 단원,generous,"관대한,(인심이)후한"
+01 단원,sensitive,"민감한,에민한"
+01 단원,confident,"자신만만한,확신하는"
+01 단원,positive,긍정적인
+01 단원,negative,부정적인
+01 단원,optimistic,"낙관적인,낙천적인"
+01 단원,cautious,"조심스러운,신중한,조심하는"
+02 단원,big,(몸집이)큰
+02 단원,old,"나이가 많은,늙은"
+02 단원,tall,키가 큰
+02 단원,cute,"귀여운,예쁜"
+02 단원,pretty,"예쁜,귀여운,매우,아주"
+02 단원,beautiful,아름다운
+02 단원,ugly,"못생긴,추한"
+02 단원,fat,"뚱뚱한,지방"
+02 단원,overweight,"과체중의,너무 살찐"
+02 단원,young,"어린,젊은"
+02 단원,handsome,(남자가) 잘 생긴
+02 단원,slim,"호리호리한,가냘픈,날씬한"
+02 단원,beard,턱수염
+02 단원,plain,평범하게 생긴
+02 단원,good-looking,잘 생긴
+02 단원,skinny,"깡마른,바싹 여윈"
+02 단원,fit,"건강한,적합하다,꼭 맞다"
+02 단원,muscular,"근육질의,건장한"
+02 단원,thin,"(몸,손가락 등이)가는,가느다란,여윈,수척한,(머리카락 등이)숱이 적은"
+02 단원,bald,대머리의
+02 단원,curly,곱슬거리는
+02 단원,dye,염색하다
+02 단원,appearance,외모
+02 단원,attractive,매력적인
+02 단원,charming,"매력적인,멋진"
+02 단원,mustache,코밑수염
+02 단원,sideburns,구레나룻
+02 단원,middle-aged,중년의
+02 단원,build,"체격,짓다,건축하다"
+02 단원,image,"이미지,상,형태"
+03 단원,smile,"미소,미소 짓다"
+03 단원,enjoy,즐기다
+03 단원,cry,울다
+03 단원,tear,눈물
+03 단원,glad,기쁜
+03 단원,angry,화가 난
+03 단원,fear,공포
+03 단원,joy,"기쁨,즐거움"
+03 단원,miss,"그리워하다,놓치다"
+03 단원,laugh,웃다
+03 단원,annoyed,"짜증 난,화가 난"
+03 단원,upset,"화가 난,기분이 상한"
+03 단원,worried,걱정스러운
+03 단원,regret,"유감,후회,후회하다"
+03 단원,bother,"괴롭히다,방해하다"
+03 단원,excited,"흥분한,신이 난"
+03 단원,surprised,놀란
+03 단원,pleased,"기쁜,좋아하는"
+03 단원,horror,"공포,전율"
+03 단원,grateful,"감사하는,고맙게 여기는"
+03 단원,anxious,"걱정되는,근심이 되는"
+03 단원,delighted,매우 기뻐하는
+03 단원,depressed,"의기소침한,낙담한,우울한"
+03 단원,frightened,"깜짝 놀란, 겁이 난"
+03 단원,ashamed,부끄러워하는
+03 단원,emotion,감정
+03 단원,sympathy,동정
+03 단원,satisfied,만족한
+03 단원,disappointed,"실망한,낙담한"
+03 단원,amused,"즐기는,즐거워하는"
+04 단원,baker,제빵사
+04 단원,captain,선장
+04 단원,reporter,"기자,통신원"
+04 단원,clerk,점원
+04 단원,artist,"예술가,화가"
+04 단원,engineer,"기사,기술자"
+04 단원,scientist,과학자
+04 단원,lawyer,변호사
+04 단원,dentist,치과의사
+04 단원,pilot,"조종사,조종하다"
+04 단원,officer,"공무원,관리"
+04 단원,gardener,정원사
+04 단원,photographer,사진사
+04 단원,president,대통령
+04 단원,salesperson,판매원
+04 단원,carpenter,목수
+04 단원,businessman,사업가
+04 단원,fisherman,어부
+04 단원,soldier,군인
+04 단원,professor,교수
+04 단원,judge,"판사,심사원,심판,판단하다"
+04 단원,hairdresser,미용사
+04 단원,accountant,회계사
+04 단원,novelist,소설가
+04 단원,security guard,"경호원,경비원"
+04 단원,teller,금전출납원
+04 단원,astronaut,우주비행사
+04 단원,detective,탐정
+04 단원,secretary,비서
+04 단원,illustrator,삽화가
+05 단원,cap,(테가 없는)모자
+05 단원,pants,바지
+05 단원,sweater,스웨터
+05 단원,skirt,치마
+05 단원,shoes,"신발,구두"
+05 단원,tie,"넥타이,~을 묶다,매다"
+05 단원,T-shirt,티셔츠
+05 단원,belt,"벨트,허리띠"
+05 단원,hat,(테가 있는)모자
+05 단원,uniform,"유니폼,제복"
+05 단원,socks,양말
+05 단원,gloves,장갑
+05 단원,boots,"장화,부츠,목이 긴 구두"
+05 단원,dress,"옷,의복,옷을 입다"
+05 단원,scarf,"스카프,목도리"
+05 단원,jacket,"재킷,상의,웃옷"
+05 단원,shorts,"반바지,운동 팬츠"
+05 단원,button,"단추,~에 단추를 채우다"
+05 단원,jeans,청바지
+05 단원,suit,"정장,슈트,~에게 잘 어울리다"
+05 단원,pocket,주머니
+05 단원,bow tie,나비넥타이
+05 단원,heels,굽 높은 구두
+05 단원,stockings,"긴 양말,스타킹"
+05 단원,sandals,샌들
+05 단원,wallet,지갑
+05 단원,purse,"돈주머니,지갑"
+05 단원,vest,조끼
+05 단원,overalls,멜빵 바지
+05 단원,athletic shoes,운동화
+06 단원,milk,우유
+06 단원,butter,버터
+06 단원,bread,빵
+06 단원,jam,잼
+06 단원,meat,고기
+06 단원,sugar,설탕
+06 단원,salt,소금
+06 단원,cookie,쿠키
+06 단원,soup,수프
+06 단원,fish,생선
+06 단원,jelly,젤리
+06 단원,beef,쇠고기
+06 단원,steak,스테이크
+06 단원,pork,돼지고기
+06 단원,pepper,"후추,고추"
+06 단원,diet,"다이어트,식이요법"
+06 단원,snack,간식
+06 단원,egg,계란
+06 단원,rice,밥
+06 단원,flour,밀가루
+06 단원,honey,꿀
+06 단원,mustard,겨자
+06 단원,noodle,국수
+06 단원,pickle,"(오이 따위 채소를)절인 것,피클,절이다"
+06 단원,stew,"스튜,찌개"
+06 단원,cereal,"곡물 식품,시리얼,곡물의"
+06 단원,meal,식사
+06 단원,side dish,"반찬,주된 요리에 곁들이는 요리"
+06 단원,appetizer,"애피타이저,식욕을 돋우는 것"
+06 단원,powder,가루
+07 단원,bake,굽다
+07 단원,break,깨뜨리다
+07 단원,fry,튀기다
+07 단원,boil,끓이다
+07 단원,mix,섞다
+07 단원,oven,오븐
+07 단원,glass,"컵,유리잔,한 컵(의 양)"
+07 단원,knife,칼
+07 단원,spoon,숟가락
+07 단원,basket,바구니
+07 단원,handle,손잡이
+07 단원,pour,붓다
+07 단원,roll,밀다
+07 단원,slice,얇게 썰다
+07 단원,refrigerator,냉장고
+07 단원,pot,(속이 깊은)냄비
+07 단원,bowl,"(우묵한)그릇,통"
+07 단원,plate,접시
+07 단원,tray,쟁반
+07 단원,jar,"(입구가 넓은)병,단지"
+07 단원,pan,"(납작한)냄비,팬"
+07 단원,beat,휘저어 섞다
+07 단원,steam,찌다
+07 단원,scoop,"주걱,국자"
+07 단원,grill,"(열로)굽다,익히다"
+07 단원,kettle,주전자
+07 단원,opener,따개
+07 단원,cabinet,진열대
+07 단원,recipe,요리법
+07 단원,blender,부엌용 믹서기
+08 단원,garden,"정원,정원을 가꾸다"
+08 단원,kitchen,부엌
+08 단원,apartment,아파트
+08 단원,window,창문
+08 단원,yard,마당
+08 단원,knock,"노크를 하다,(문 등을)두드리다"
+08 단원,pet,애완동물
+08 단원,soap,비누
+08 단원,towel,"타월,수건"
+08 단원,curtain,커튼
+08 단원,mirror,거울
+08 단원,gate,문
+08 단원,bedroom,침실
+08 단원,roof,지붕
+08 단원,garage,차고
+08 단원,laundry,세탁물
+08 단원,water,"물,물주다"
+08 단원,lawn,잔디
+08 단원,floor,"마루,바닥,층"
+08 단원,feed,먹이다
+08 단원,bathroom,욕실
+08 단원,ceiling,천장
+08 단원,shelf,선반
+08 단원,drawer,서랍
+08 단원,lamp,"전기스탠드,램프"
+08 단원,sheet,"시트,홑이불"
+08 단원,stair,"계단,층계"
+08 단원,scale,"체중계,저울"
+08 단원,sink,"싱크대,개수대"
+08 단원,tap,수도꼭지
+09 단원,come,"오다,도달하다,도착하다"
+09 단원,go,가다
+09 단원,park,"주차하다,공원"
+09 단원,stop,"정류장,정차하다,그만두다"
+09 단원,drive,운전하다
+09 단원,subway,지하철
+09 단원,plane,비행기
+09 단원,ticket,"티켓,표"
+09 단원,seat,좌석
+09 단원,road,"길,도로"
+09 단원,fare,요금
+09 단원,bicycle,자전거
+09 단원,cross,"~을 건너다,십자가"
+09 단원,track,"철도 선로,궤도"
+09 단원,rail,철로
+09 단원,curve,"굽이,커브,굴곡,구부러지다"
+09 단원,sign,"표지(판),서명하다"
+09 단원,station,"역,정거장,(관공)서,국"
+09 단원,wheel,바퀴
+09 단원,license,면허증
+09 단원,accident,사고
+09 단원,traffic,"교통(량),교통의"
+09 단원,forward,"앞쪽으로,앞을 향하여"
+09 단원,transfer,"갈아타다,나르다"
+09 단원,passenger,승객
+09 단원,harbor,항구
+09 단원,gas,"휘발유,가솔린"
+09 단원,platform,"(역의)플랫폼,승강장"
+09 단원,transport,"수송하다,운송하다"
+09 단원,crash,"충돌,충돌하다"
+10 단원,glue,"풀,풀을 바르다,접착하다"
+10 단원,ruler,자
+10 단원,scissors,가위
+10 단원,eraser,지우개
+10 단원,desk,책상
+10 단원,chair,의자
+10 단원,table,탁자
+10 단원,pencil,연필
+10 단원,paper,종이
+10 단원,room,"방,실"
+10 단원,calendar,달력
+10 단원,printer,"인쇄기,프린터"
+10 단원,envelope,봉투
+10 단원,folder,"폴더,서류철"
+10 단원,call,"통화,전화를 걸다"
+10 단원,letter,편지
+10 단원,seal,"도장,인감,봉인,날인하다,봉하다"
+10 단원,clip,"클립,자르다,깎다"
+10 단원,pin,"핀,핀으로 고정하다"
+10 단원,message,메시지
+10 단원,bookcase,"책장,책꽂이"
+10 단원,manager,관리자
+10 단원,calculator,계산기
+10 단원,stationery,문구류
+10 단원,staple,스테이플러로 고정시키다
+10 단원,punch,"(표에 구멍을 뚫는) 펀치, 구멍을 뚫다"
+10 단원,highlighter,형광 컬러 펜
+10 단원,document,"서류,문서"
+10 단원,printout,출력물
+10 단원,photocopy,"사진 복사물,사진 복사하다"
+11 단원,building,건물
+11 단원,bakery,제과점
+11 단원,bank,"은행,둑,제방"
+11 단원,bookstore,서점
+11 단원,fire station,소방서
+11 단원,hospital,병원
+11 단원,post office,우체국
+11 단원,museum,박물관
+11 단원,city hall,시청
+11 단원,police station,경찰서
+11 단원,drugstore,약국
+11 단원,trash,쓰레기
+11 단원,street,거리
+11 단원,avenue,"도시의 큰 대로, 넓은 길"
+11 단원,block,"블록,덩어리,장애물,막다,봉쇄하다"
+11 단원,straight,"똑바른,직선의,곧장,일직선으로"
+11 단원,corner,"모퉁이,구석"
+11 단원,turn,"회전,방향 전환,돌다"
+11 단원,left,왼쪽
+11 단원,wrong,잘못된
+11 단원,pedestrian,보행자
+11 단원,department store,백화점
+11 단원,sidewalk,"인도,보도"
+11 단원,crosswalk,횡단보도
+11 단원,intersection,교차로
+11 단원,patrol,"순찰대,순찰 경관"
+11 단원,signal,"신호,신호기"
+11 단원,booth,(공중)전화 박스
+11 단원,highway,고속도로
+11 단원,sewer,하수구
+12 단원,iron,"다리미,철,다림질하다"
+12 단원,lift,"올리다,들어 올리다"
+12 단원,wash,"세탁물,씻다"
+12 단원,mop,"대걸레,대걸레로 닦다"
+12 단원,brush,"솔,솔질,솔질하다"
+12 단원,daily,"매일의,나날의"
+12 단원,hang,"걸다,매달리다"
+12 단원,pick,"골라잡다,따다"
+12 단원,hammer,망치
+12 단원,switch,스위치
+12 단원,hook,"갈고리,(물건을 거는) 고리"
+12 단원,ladder,사다리
+12 단원,carry,나르다
+12 단원,tool,"도구,연장"
+12 단원,drill,"송곳,구멍을 뚫다"
+12 단원,saw,"톱,톱질하다"
+12 단원,bucket,"물통,양동이"
+12 단원,housework,"가사,집안일"
+12 단원,dig,"파다,파헤치다"
+12 단원,sweep,"청소하다,쓸다"
+12 단원,fold,"개다,접다"
+12 단원,rake,"갈퀴,긁어모으다"
+12 단원,trim,깎아 다듬다
+12 단원,polish,"닦다,윤을 내다"
+12 단원,screw,"나사,나사로 죄다,비틀다"
+12 단원,broom,빗자루
+12 단원,shovel,삽
+12 단원,wrench,렌치(너트를 죄는 기구)
+12 단원,flashlight,손전등
+12 단원,outlet,"(전기)콘센트,출구,배출구"
+13 단원,bottle,병
+13 단원,package,"(포장용)용기,상자,꾸러미,소포"
+13 단원,can,"깡통,통조림,(음식물을)통조림으로 만들다"
+13 단원,box,상자
+13 단원,tube,"튜브,짜내어 쓰게 된 용기"
+13 단원,item,"항목,품목"
+13 단원,pack,"꾸러미,한 상자"
+13 단원,bag,"자루,봉지,가방"
+13 단원,ice,얼음
+13 단원,bar,"막대기,막대기 모양의 것"
+13 단원,piece,조각
+13 단원,counter,계산대
+13 단원,spray,"스프레이,분무기,뿌리다"
+13 단원,bin,(뚜껑 달린) 큰 상자
+13 단원,smoked,훈제된
+13 단원,fresh,신선한
+13 단원,grain,"곡물,곡류"
+13 단원,vegetable,야채
+13 단원,cart,"손수레,카트"
+13 단원,seafood,해산물
+13 단원,cashier,계산원
+13 단원,freezer,냉동고
+13 단원,frozen food,냉동식품
+13 단원,grocery,"식료 잡화점,식품점"
+13 단원,container,용기
+13 단원,aisle,통로
+13 단원,dairy,"우유의,유제품의"
+13 단원,bundle,"(한 묶음의)다발,뭉치"
+13 단원,pile,더미
+13 단원,cash register,금전 등록기
+14 단원,long,긴
+14 단원,short,짧은
+14 단원,dirty,"더러운,청소하다,깨끗이 하다"
+14 단원,clean,깨끗한
+14 단원,high,높은
+14 단원,low,낮은
+14 단원,new,새로운
+14 단원,open,"열린,열다"
+14 단원,heavy,무거운
+14 단원,full,"가득 찬,배부른"
+14 단원,dark,어두운
+14 단원,deep,깊은
+14 단원,round,"둥근,한 바퀴를 도는"
+14 단원,light,"가벼운,(양이)적은,빛"
+14 단원,famous,유명한
+14 단원,colorful,"다채로운,화려한"
+14 단원,empty,텅 빈
+14 단원,metal,금속
+14 단원,plastic,"플라스틱의,비닐의,성형의"
+14 단원,wide,넓은
+14 단원,tight,꽉 끼는
+14 단원,loose,헐렁한
+14 단원,sharp,날카로운
+14 단원,shallow,얕은
+14 단원,oval,"달걀 모양,타원형,달걀 모양의,타원형의"
+14 단원,square,"정사각형,광장,정사각형의,사각의"
+14 단원,crack,"(갈라진)틈,틈새"
+14 단원,glitter,빛나다
+14 단원,firm,"단단한,굳은,회사"
+14 단원,wooden,나무로 만든
+15 단원,see,"보다,알다,이해하다"
+15 단원,watch,지켜보다
+15 단원,look,"보다,바라보다"
+15 단원,hear,듣다
+15 단원,listen,주의해서 듣다
+15 단원,smell,"냄새,후각,냄새가 나다,냄새를 맡다"
+15 단원,loud,"(소리가)큰,시끄러운"
+15 단원,bad,"불쾌한,나쁜,(음식이)상한"
+15 단원,taste,"맛,미각,맛보다,맛이 나다"
+15 단원,feel,느끼다
+15 단원,hard,"굳은,단단한,어려운"
+15 단원,noise,소음
+15 단원,bitter,"쓴,쓴맛의"
+15 단원,sweet,달콤한
+15 단원,sour,"신맛의,신"
+15 단원,juicy,즙이 많은
+15 단원,touch,"촉감,접촉,만지다,건드리다"
+15 단원,rough,"거친,가공하지 않은"
+15 단원,soft,부드러운
+15 단원,sense,"감각,감지하다"
+15 단원,objective,객관적인
+15 단원,sight,"시각,시력,보기,일견"
+15 단원,stare,"빤히 보다,응시하다"
+15 단원,whisper,"속삭임,속삭이다"
+15 단원,audio,"음의 재생,오디오,음성의,오디오의"
+15 단원,flavor,"맛,풍미"
+15 단원,smooth,"부드러운,부드럽게 하다"
+15 단원,notice,"주의,주목,주의하다,알아차리다"
+15 단원,observe,"관찰하다,알아차리다"
+15 단원,discover,"발견하다,알아내다"
+16 단원,health,건강
+16 단원,weak,"몸이 약한,허약한"
+16 단원,sick,"(몸이)아픈,병든"
+16 단원,cough,"기침,기침하다"
+16 단원,fever,"열,발열"
+16 단원,sore,"아픈,쑤시는"
+16 단원,cut,"베인 상처,상처를 내다,~을 베다"
+16 단원,pain,고통
+16 단원,medicine,약
+16 단원,ache,"통증,아픔,통증이 있다"
+16 단원,dizzy,어지러운
+16 단원,disease,"병,질병"
+16 단원,cancer,암
+16 단원,blind,"눈 먼,시각 장애의"
+16 단원,deaf,"귀가 먹은,청각 장애가 있는"
+16 단원,patient,"환자,끈기 있는,참을성 있는"
+16 단원,cure,"치료법,치료하다"
+16 단원,relax,"쉬게 하다,편히 쉬다"
+16 단원,burn,"화상,화상을 입다(입히다),(햇볕에)타다"
+16 단원,symptom,증상
+16 단원,wound,"상처,상처를 내다"
+16 단원,vomit,토하다
+16 단원,sneeze,재채기하다
+16 단원,bruise,"멍,타박상"
+16 단원,examine,진찰하다
+16 단원,recover,회복하다
+16 단원,prevent,"예방하다,막다"
+16 단원,medical,의학의
+16 단원,operate,수술하다
+16 단원,emergency,"비상사태,응급"
+17 단원,trip,여행
+17 단원,airport,공항
+17 단원,sightseeing,관광
+17 단원,tourist,"여행자,관광객"
+17 단원,guide,"안내자,가이드,안내하다"
+17 단원,route,"(비행기,기차의)노선,경로"
+17 단원,visa,"비자,사증"
+17 단원,flight,비행
+17 단원,reserve,예약하다
+17 단원,cancel,"취소,취소하다"
+17 단원,scenery,풍경
+17 단원,apply,신청하다
+17 단원,passport,여권
+17 단원,insurance,보험
+17 단원,reach,"도착하다,도달하다"
+17 단원,attendant,"안내원,시중드는 사람"
+17 단원,board,"탑승하다,승차하다"
+17 단원,depart,출발하다
+17 단원,arrive,도착하다
+17 단원,land,"땅,착륙하다"
+17 단원,abroad,해외로
+17 단원,itinerary,"여행 일정,여행 일기"
+17 단원,baggage,"짐,수하물"
+17 단원,claim,"요구,청구,주장,요구하다,주장하다"
+17 단원,check,"수표,점검,조사하다,점검하다"
+17 단원,destination,목적지
+17 단원,security,"보안,안전"
+17 단원,delay,"지연,연기,연기하다"
+17 단원,jet lag,"시차증(여행 시차에 의한 피로,신경 과민)"
+17 단원,souvenir,기념품
+18 단원,movie,영화
+18 단원,puzzle,"수수께끼,퍼즐"
+18 단원,game,"게임,시합"
+18 단원,interest,"흥미,관심"
+18 단원,read,읽다
+18 단원,paint,"페인트칠을 하다,그림을 그리다"
+18 단원,sing,"노래를 부르다,노래하다"
+18 단원,draw,그림을 그리다
+18 단원,picture,"사진,그림"
+18 단원,musical,"뮤지컬,음악의"
+18 단원,dance,"춤,춤을 추다"
+18 단원,collect,모으다
+18 단원,chess,"체스,서양 장기"
+18 단원,hike,"하이킹하다,도보여행하다"
+18 단원,comic,"희극의,만화의"
+18 단원,camp,"야영,캠프,야영지,야영하다"
+18 단원,pleasure,기쁨
+18 단원,stamp,"우표,도장"
+18 단원,jog,조깅하다
+18 단원,magic,"마법,주술,마법의"
+18 단원,fix,"고치다,고정시키다"
+18 단원,favorite,가장 좋아하는
+18 단원,pen pal,편지 친구
+18 단원,mania,열광
+18 단원,volunteer,"지원자,자원봉사자"
+18 단원,chat,잡담하다
+18 단원,model,"모형,모델,모형의,모델이 되는"
+18 단원,knit,뜨개질을 하다
+18 단원,leisure,"여가,한가한 시간,한가한"
+18 단원,involve,"수반하다,필요로 하다"
+19 단원,exercise,"운동,연습,운동하다"
+19 단원,gym,체육관
+19 단원,stretch,"몸을 쭉 뻗다,쭉 내밀다"
+19 단원,swim,수영하다
+19 단원,kick,"(걷어) 차기,발길질,발로 차다"
+19 단원,pass,"(공을)패스하다,지나가다"
+19 단원,outdoor,"집밖의,실외의"
+19 단원,player,"경기자,선수"
+19 단원,bowling,볼링
+19 단원,soccer,축구
+19 단원,goal,"(축구의)골,득점,목적,목표"
+19 단원,shoot,"사격,쏘다,공을 차다"
+19 단원,coach,"코치,지도자,마차,코치하다,지도하다"
+19 단원,basketball,농구
+19 단원,baseball,야구
+19 단원,base,"(야구의)루,누,토대,기초"
+19 단원,match,"시합,경기,경쟁 상대"
+19 단원,batter,타자
+19 단원,throw,"투구,던짐,던지다"
+19 단원,catch,"잡다,공을 받다"
+19 단원,racket,"라켓,라켓으로 치다"
+19 단원,athlete,운동선수
+19 단원,defender,수비수
+19 단원,score,"(경기)득점,점수,득점하다"
+19 단원,referee,"(운동경기)심판,심판을 보다"
+19 단원,champion,"챔피언,우승자"
+19 단원,sweat,"땀,(땀이 나도록)힘든 일,땀을 흘리다"
+19 단원,dive,"잠수,잠수하다,물 속에 뛰어들다"
+19 단원,skate,"스케이트 구두,스케이트를 타다"
+19 단원,surf,"파도,파도를 타다,서핑하다"
+20 단원,shop,"가게,물건을 사다"
+20 단원,store,"가게,상점"
+20 단원,gift,선물
+20 단원,cheap,"값싼,저렴한"
+20 단원,expensive,값비싼
+20 단원,sale,"판매,염가 판매,세일"
+20 단원,size,크기
+20 단원,buy,사다
+20 단원,sell,팔다
+20 단원,choose,선택하다
+20 단원,pay,지불하다
+20 단원,business,영업
+20 단원,tax,세금
+20 단원,mart,"시장,거래소,슈퍼마켓"
+20 단원,goods,"상품,물품"
+20 단원,tag,정가표
+20 단원,medium,"중간,중간의"
+20 단원,cash,현금
+20 단원,change,"거스름돈,변화,바꾸다"
+20 단원,customer,고객
+20 단원,display,"전시,진열,전시하다"
+20 단원,stand,"노점,가판대"
+20 단원,retail,소매
+20 단원,discount,"할인,할인하다"
+20 단원,receipt,영수증
+20 단원,brand-name,(유명)상표가 붙은
+20 단원,auction,경매
+20 단원,reasonable,"(가격이)합리적인,저렴한,이치에 맞는"
+20 단원,catalog,"목록,(상품 등의)카탈로그"
+20 단원,quality,"질,품질"
+21 단원,eat,먹다
+21 단원,drink,"음료,마실 것,마시다"
+21 단원,take,받다
+21 단원,order,"주문,주문하다"
+21 단원,cook,"요리사,요리하다"
+21 단원,chef,"요리사,주방장"
+21 단원,buffet,"뷔페 식당,뷔페식 상차림"
+21 단원,waiter,웨이터
+21 단원,dessert,"디저트,후식"
+21 단원,napkin,냅킨
+21 단원,restaurant,음식점
+21 단원,set,"놓다,준비하다"
+21 단원,deliver,배달하다
+21 단원,wipe,닦다
+21 단원,straw,"빨대,지푸라기"
+21 단원,bite,"한 입,물다"
+21 단원,spill,"흘리다,엎지르다"
+21 단원,special,"특별한 것,특별 메뉴,특별한"
+21 단원,rare,"(고기 등이)덜 익은,드문,희귀한"
+21 단원,calorie,"칼로리,열량"
+21 단원,serve,"시중들다,제공하다"
+21 단원,tip,"팁,(물건,신체의)뾰족한 끝"
+21 단원,beverage,음료
+21 단원,refill,"새 보충물,다시 채우다,보충하다"
+21 단원,wrap,"싸다,포장하다,포장지"
+21 단원,bill,"계산서,청구서"
+21 단원,total,"합계,총액,전체의,총"
+21 단원,ingredient,재료
+21 단원,recommend,추천하다
+21 단원,appetite,식욕
+22 단원,sand,모래
+22 단원,wave,파도
+22 단원,shell,조개
+22 단원,suntan,"선탠,볕에 그을음"
+22 단원,stone,돌
+22 단원,raft,"고무보트,뗏목"
+22 단원,yacht,요트
+22 단원,sunglasses,선글라스
+22 단원,parasol,"파라솔,양산"
+22 단원,mat,"돗자리,매트"
+22 단원,vacation,방학
+22 단원,rock,"바위,암석"
+22 단원,whistle,"호각,호각을 불다"
+22 단원,lifeboat,구명보트
+22 단원,scuba,"스쿠버,잠수용 호흡장치"
+22 단원,swimsuit,수영복
+22 단원,sunblock,자외선 차단제
+22 단원,cooler,냉장 박스
+22 단원,blanket,담요
+22 단원,shade,그늘
+22 단원,shore,"물가,기슭"
+22 단원,pail,양동이
+22 단원,sunbath,일광욕
+22 단원,lifeguard,인명 구조원
+22 단원,float,"물 위에 뜨다,(배 등을)띄우다"
+22 단원,flipper,"물갈퀴,오리발"
+22 단원,binoculars,쌍안경
+22 단원,snorkel,"스노클을 쓰고 잠수하다,헤엄치다"
+22 단원,pebble,"조약돌,자갈"
+22 단원,expose,노출하다
+23 단원,festival,축제
+23 단원,Valentine,밸런타인
+23 단원,color,"색,색칠하다"
+23 단원,birthday,생일
+23 단원,card,카드
+23 단원,candle,초
+23 단원,blow,끄다
+23 단원,Christmas,크리스마스
+23 단원,candy,사랑
+23 단원,year,"해,년"
+23 단원,wish,"소원,기원하다"
+23 단원,mask,가면
+23 단원,honeymoon,신혼여행
+23 단원,Easter,부활절
+23 단원,hide,숨기다
+23 단원,invitation,"초대,초대장"
+23 단원,Eve,"전날 밤,이브"
+23 단원,decorate,장식하다
+23 단원,witch,마녀
+23 단원,trick,속이다
+23 단원,costume,"복장,의상"
+23 단원,turkey,"칠면조,칠면조 고기"
+23 단원,congratulate,축하하다
+23 단원,Thanksgiving,추수 감사절
+23 단원,Halloween,핼러윈
+23 단원,reindeer,순록
+23 단원,lantern,랜턴
+23 단원,skeleton,해골
+23 단원,stuff,(속을)채우다
+23 단원,crowded,"붐비는,혼잡한"
+24 단원,jump,점프하다
+24 단원,seesaw,"시소,시소를 타다"
+24 단원,pond,연못
+24 단원,ride,"탈것,타다"
+24 단원,bench,"긴 의자,벤치"
+24 단원,event,"사건,행사"
+24 단원,picnic,소풍
+24 단원,zoo,동물원
+24 단원,run,달리다
+24 단원,concert,"콘서트,공연"
+24 단원,visit,방문하다
+24 단원,rope,줄
+24 단원,backpack,"배낭,배낭을 지고 걷다"
+24 단원,slide,"미끄럼틀,미끄러지다"
+24 단원,fountain,분수
+24 단원,playground,"놀이터,운동장"
+24 단원,swing,"그네,그네를 타다"
+24 단원,sleeping bag,침낭
+24 단원,campfire,모닥불
+24 단원,fishing rod,낚싯대
+24 단원,walk,"걷다,산책하다"
+24 단원,amusement,"놀이,즐거움,재미"
+24 단원,merry-go-round,회전목마
+24 단원,flea market,벼룩시장
+24 단원,botanical garden,식물원
+24 단원,aquarium,수족관
+24 단원,thermos,보온병
+24 단원,stake,말뚝
+24 단원,peak,꼭대기
+24 단원,rapids,"급류,여울"
+25 단원,sky,하늘
+25 단원,flood,홍수
+25 단원,hurricane,"폭풍,허리케인"
+25 단원,thunder,"천둥,천둥같이 큰 소리"
+25 단원,lightning,"번개,번개 같은"
+25 단원,creature,"(신의)창조물,피조물"
+25 단원,climb,"오르다,등반하다"
+25 단원,soil,"흙,땅,토지"
+25 단원,island,섬
+25 단원,breeze,산들바람
+25 단원,cliff,"벼랑,절벽"
+25 단원,volcano,화산
+25 단원,natural,"자연의,자연스러운"
+25 단원,forest,"숲,삼림"
+25 단원,desert,사막
+25 단원,explore,탐험하다
+25 단원,stream,"시내,개울,흐름,동향"
+25 단원,lake,호수
+25 단원,waterfall,폭포
+25 단원,river,강
+25 단원,ocean,"바다,대양"
+25 단원,coast,해안가
+25 단원,tide,"조수,간만"
+25 단원,landslide,산사태
+25 단원,earthquake,지진
+25 단원,element,"요소,성분,원소"
+25 단원,appear,나타나다
+25 단원,source,"원천,수원"
+25 단원,disaster,"재난,재해"
+25 단원,food chain,먹이 사슬
+26 단원,hot,"더운,뜨거운"
+26 단원,cold,"차가운,추운"
+26 단원,cool,시원한
+26 단원,clear,"청명한,깨끗한,명백한"
+26 단원,sunny,"햇빛이 밝은,화창한"
+26 단원,cloudy,구름 낀
+26 단원,rainy,비가 오는
+26 단원,windy,바람 부는
+26 단원,snowy,눈이 내리는
+26 단원,foggy,안개 낀
+26 단원,freezing,"몹시 추운,얼어붙을 듯한"
+26 단원,icy,"얼음의,싸늘한"
+26 단원,dry,"건조한,말리다,건조하게 하다"
+26 단원,moist,"축축한,습기 있는"
+26 단원,storm,폭풍(우)
+26 단원,rainfall,"강우,강우량"
+26 단원,hail,"우박,싸락눈"
+26 단원,snowstorm,눈보라
+26 단원,blizzard,"강한 눈보라,블리자드"
+26 단원,drizzle,이슬비
+26 단원,melt,"녹다,녹이다"
+26 단원,gale,강풍
+26 단원,forecast,"예측,(일기의)예보,예측하다,(일기,기상을)예보하다"
+26 단원,condition,"상태,상황"
+26 단원,drought,가뭄
+26 단원,climate,기후
+26 단원,degree,(온도 단위인) 도
+26 단원,temperature,온도
+26 단원,humid,"습한,눅눅한"
+26 단원,sticky,"끈적끈적한,무더운"
+27 단원,farm,농장
+27 단원,fence,울타리
+27 단원,field,밭
+27 단원,cowboy,"카우보이,목동"
+27 단원,rabbit,토끼
+27 단원,sheep,양
+27 단원,horse,말
+27 단원,bull,황소
+27 단원,chicken,닭
+27 단원,goat,염소
+27 단원,pig,돼지
+27 단원,buffalo,"버팔로,물소,들소"
+27 단원,meadow,"목초지,초원"
+27 단원,barn,헛간
+27 단원,hay,건초
+27 단원,harvest,수확하다
+27 단원,calf,송아지
+27 단원,cattle,소
+27 단원,lay,"알을 낳다,~을~에 두다"
+27 단원,cotton,면
+27 단원,shepherd,양치기
+27 단원,farmhouse,"농가,농가에 딸린 집"
+27 단원,orchard,과수원
+27 단원,shed,"헛간,광"
+27 단원,ranch,"농장,목축장"
+27 단원,pasture,"목장,방목하다"
+27 단원,combine,콤바인(베어서 탈곡하는 농기계)
+27 단원,scarecrow,허수아비
+27 단원,livestock,가축류
+27 단원,vineyard,"포도밭,포도원"
+28 단원,flower,"꽃,꽃이 피다"
+28 단원,leaf,"나뭇잎,잎사귀"
+28 단원,bloom,"꽃,개화,꽃이 피다,개화하다"
+28 단원,fruit,"열매,과일,결과,성과"
+28 단원,grass,"풀,잔디,잔디밭"
+28 단원,weed,"잡초,~의 잡초를 뽑다"
+28 단원,plant,"식물,심다,씨를 뿌리다"
+28 단원,seed,"씨앗,종자"
+28 단원,sprout,새싹
+28 단원,bud,"(식물의)눈,봉오리"
+28 단원,petal,꽃잎
+28 단원,root,"뿌리,뿌리 뽑다"
+28 단원,stem,"(식물의)줄기,대,유래하다,시작되다"
+28 단원,thorn,가시
+28 단원,branch,"나뭇가지,분점,지점"
+28 단원,bough,(나무의)큰 가지
+28 단원,maple,단풍나무
+28 단원,bamboo,대나무
+28 단원,needle,"(침엽수의)바늘처럼 뾰족한 잎,바늘"
+28 단원,pine tree,소나무
+28 단원,cherry tree,벚나무
+28 단원,cactus,선인장
+28 단원,trunk,"나무의 몸통 부분,코끼리의 코"
+28 단원,bark,"나무껍질,(개가)짖다"
+28 단원,fertilizer,비료
+28 단원,bush,"관목,작은 나무들이 우거진 관목 숲"
+28 단원,palm,"야자수,손바닥"
+28 단원,bulb,"구근,알뿌리,전구"
+28 단원,poisonous,독이 있는
+28 단원,herb,"약초,허브"
+29 단원,dog,개
+29 단원,rat,쥐
+29 단원,bat,박쥐
+29 단원,snake,뱀
+29 단원,elephant,코끼리
+29 단원,monkey,원숭이
+29 단원,fox,여우
+29 단원,tiger,호랑이
+29 단원,whale,고래
+29 단원,bear,곰
+29 단원,deer,사슴
+29 단원,kangaroo,캥거루
+29 단원,giraffe,기린
+29 단원,zebra,얼룩말
+29 단원,camel,"낙타,낙타색"
+29 단원,dolphin,돌고래
+29 단원,shark,상어
+29 단원,leopard,표범
+29 단원,tortoise,(육지 또는 민물)거북
+29 단원,frog,개구리
+29 단원,dinosaur,공룡
+29 단원,bird cage,새장
+29 단원,fish tank,어항
+29 단원,octopus,"문어,낙지"
+29 단원,jellyfish,해파리
+29 단원,sea horse,해마
+29 단원,hippo(hippopotamus),하마
+29 단원,rhino(rhinoceros),코뿔소
+29 단원,crocodile,악어
+29 단원,lizard,도마뱀
+30 단원,insect,곤충
+30 단원,ant,개미
+30 단원,bee,벌
+30 단원,fly,"파리,날다"
+30 단원,wing,날개
+30 단원,hen,암탉
+30 단원,duck,오리
+30 단원,spider,거미
+30 단원,butterfly,나비
+30 단원,beetle,딱정벌레
+30 단원,ladybug,무당벌레
+30 단원,flea,벼룩
+30 단원,mosquito,모기
+30 단원,swan,백조
+30 단원,penguin,펭귄
+30 단원,eagle,독수리
+30 단원,beak,부리
+30 단원,crow,까마귀
+30 단원,pigeon,비둘기
+30 단원,parrot,앵무새
+30 단원,goose,거위
+30 단원,cuckoo,뻐꾸기
+30 단원,owl,올빼미
+30 단원,peacock,공작새
+30 단원,ostrich,타조
+30 단원,swallow,"제비,삼키다"
+30 단원,moth,"나방,좀벌레"
+30 단원,cricket,귀뚜라미
+30 단원,caterpillar,"애벌레,유충"
+30 단원,hummingbird,벌새
+31 단원,air,"공기,대기"
+31 단원,pollution,오염
+31 단원,protect,보호하다
+31 단원,separate,분리하다
+31 단원,waste,"쓰레기,낭비,낭비하다"
+31 단원,environment,환경
+31 단원,effect,"영향,효과"
+31 단원,resource,자원
+31 단원,recycle,재활용하다
+31 단원,destroy,"파괴하다,부수다"
+31 단원,damage,"손상,피해"
+31 단원,garbage,쓰레기
+31 단원,share,공유하다
+31 단원,cause,야기하다
+31 단원,ruin,"파괴,유적,폐허,파멸시키다"
+31 단원,raw,"날것의,가공하지 않은"
+31 단원,electricity,전기
+31 단원,pure,순수한
+31 단원,smog,"스모그,연무"
+31 단원,fuel,연료
+31 단원,fossil,화석
+31 단원,acid,"산,산성의"
+31 단원,toxic,유독한
+31 단원,exhaust,"배기가스,다 써버리다"
+31 단원,shortage,"부족,결핍"
+31 단원,reduce,줄이다
+31 단원,endangered,"멸종위기의,위험에 처한"
+31 단원,leak,"누출,새다"
+31 단원,overuse,"남용,남용하다"
+31 단원,greenhouse,온실
+32 단원,electric,전기의
+32 단원,invent,발명하다
+32 단원,machine,기계
+32 단원,data,"자료,정보"
+32 단원,important,중요한
+32 단원,cell,세포
+32 단원,magnet,자석
+32 단원,e-mail,이메일
+32 단원,prove,증명하다
+32 단원,inform,"알리다,통지하다"
+32 단원,experiment,"실험,실험하다"
+32 단원,method,방법
+32 단원,chemical,"화학의,화학약품"
+32 단원,measure,측정하다
+32 단원,technology,기술
+32 단원,inspect,조사하다
+32 단원,imagine,상상하다
+32 단원,visible,눈에 보이는
+32 단원,vacuum,"진공,공백,(진공청소기로)청소하다"
+32 단원,react,반응하다
+32 단원,mobile,이동성의
+32 단원,charge,충전하다
+32 단원,multiply,"곱하다,증가시키다"
+32 단원,gravity,중력
+32 단원,browse,검색하다
+32 단원,device,장치
+32 단원,delete,삭제하다
+32 단원,wireless,무선의
+32 단원,transmit,"보내다,전송하다,전염시키다"
+32 단원,formula,공식
+33 단원,earth,지구
+33 단원,sun,태양
+33 단원,moon,달
+33 단원,star,"별,항성"
+33 단원,planet,행성
+33 단원,universe,우주
+33 단원,solar,태양의
+33 단원,lunar,달의
+33 단원,crew,(비행기나 배의)승무원
+33 단원,rocket,"로켓,로켓으로 쏘아 올리다"
+33 단원,surface,표면
+33 단원,Mercury,"수성,수은"
+33 단원,Venus,금성
+33 단원,Mars,화성
+33 단원,Jupiter,목성
+33 단원,Saturn,토성
+33 단원,ring,"고리,반지"
+33 단원,comet,혜성
+33 단원,telescope,망원경
+33 단원,milky way,은하수
+33 단원,space shuttle,우주 왕복선
+33 단원,space station,우주 정거장
+33 단원,eclipse,식(개기일식의 식)
+33 단원,satellite,위성
+33 단원,orbit,"궤도,궤도를 그리며 돌다"
+33 단원,galaxy,은하
+33 단원,astronomy,천문학
+33 단원,astronomer,천문학자
+33 단원,Big Bang,빅뱅(우주 생성의 시발이 된 것으로 여겨지는 대폭발)
+33 단원,light year,광년(빛이 1년에 나아가는 거리로 약 9조 4670억 킬로미터)
+34 단원,power,"힘,권력,에너지"
+34 단원,energy,에너지
+34 단원,produce,"생산하다,만들어내다"
+34 단원,oil,기름
+34 단원,wind,바람
+34 단원,coal,석탄
+34 단원,mine,"광산,지뢰,채굴하다"
+34 단원,factory,공장
+34 단원,dam,댐
+34 단원,heat,"열,가열하다"
+34 단원,battery,배터리
+34 단원,generate,"생성하다,발생시키다"
+34 단원,nuclear,원자핵의
+34 단원,windmill,풍차
+34 단원,failure,"정지,고장,실패"
+34 단원,tidal,조수의(조수간만의 차 할 때 조수)
+34 단원,careless,부주의한
+34 단원,transform,"바꾸다,변형시키다"
+34 단원,natural gas,천연 가스
+34 단원,abundant,"풍부한,풍족한"
+34 단원,utility pole,전신주
+34 단원,solar collector,태양열 집열기
+34 단원,transmission tower,송전탑
+34 단원,radioactive,방사능을 가진
+34 단원,power line,송전선
+34 단원,conserve,"보전하다,아끼다,절약하다"
+34 단원,efficiency,효율
+34 단원,crisis,위기
+34 단원,authorized,권한이 부여된
+34 단원,turbine,"터빈,원동기"
+35 단원,learn,배우다
+35 단원,lesson,"수업,교훈"
+35 단원,study,"연구,공부하다"
+35 단원,exam,시험
+35 단원,grade,"학년,등급,점수,점수를 매기다"
+35 단원,college,단과대학
+35 단원,university,종합대학
+35 단원,elementary,"기초의,기본이 되는"
+35 단원,discuss,토론하다
+35 단원,explain,설명하다
+35 단원,memorize,암기하다
+35 단원,entrance,"입장,입학"
+35 단원,educate,"교육하다,육성하다"
+35 단원,kindergarten,유치원
+35 단원,graduate,졸업하다
+35 단원,knowledge,지식
+35 단원,schoolmate,"학교 친구,동창생"
+35 단원,homeroom teacher,담임 선생님
+35 단원,submit,제출하다
+35 단원,academic,"학술적인,학문적인"
+35 단원,instruct,"교수하다,가르치다"
+35 단원,absent,결석한
+35 단원,attend,"출석하다,참석하다"
+35 단원,semester,학기
+35 단원,alternative,"대안,대안의"
+35 단원,lecture,강의
+35 단원,pupil,학생
+35 단원,intelligence,"지성,지능"
+35 단원,scholarship,장학금
+35 단원,encourage,"용기를 북돋우다,격려하다"
+36 단원,teacher,선생님
+36 단원,classroom,교실
+36 단원,flag,"국기,깃발"
+36 단원,chalk,분필
+36 단원,map,지도
+36 단원,textbook,교과서
+36 단원,notebook,공책
+36 단원,partner,"짝,동료,협력자"
+36 단원,homework,숙제
+36 단원,math,수학
+36 단원,classmate,"급우,학급친구"
+36 단원,senior,"선배,손위의,최고 학년의"
+36 단원,locker,"(자물쇠가 달린)사물함,로커"
+36 단원,chalk board,칠판
+36 단원,marker,마커펜
+36 단원,club,동아리
+36 단원,hall,"강당,부속회관"
+36 단원,subject,"과목,주제"
+36 단원,project,"계획,기획,프로젝트"
+36 단원,library,도서관
+36 단원,P.E.(Physical Education),체육
+36 단원,hallway,복도
+36 단원,principal,"교장,교장 선생님"
+36 단원,counsel,"상담,상담하다,권고하다"
+36 단원,admit,"받아들이다,인정하다"
+36 단원,auditorium,강당
+36 단원,cafeteria,"식당,간이식당"
+36 단원,assignment,"과제,숙제"
+36 단원,laboratory,"실습실,연습실"
+36 단원,bulletin board,게시판
+37 단원,rich,부유한
+37 단원,save,"저축하다,저장하다,구하다"
+37 단원,spend,"(시간,돈을)쓰다"
+37 단원,value,"가치,값,소중히 여기다"
+37 단원,local,지역의
+37 단원,crowd,군중
+37 단원,debt,"빚,부채"
+37 단원,salary,급여
+37 단원,invest,투자하다
+37 단원,status,"지위,상태"
+37 단원,culture,문화
+37 단원,citizen,"시민,국민"
+37 단원,public,"대중의,공공의,공개된"
+37 단원,supply,"공급,공급하다"
+37 단원,demand,"수요,요구하다"
+37 단원,import,"수입,수입하다"
+37 단원,export,"수출,수출하다"
+37 단원,account,계좌
+37 단원,employ,고용하다
+37 단원,individual,"개인,개인의,개인적인"
+37 단원,relationship,"관계,사이"
+37 단원,tradition,전통
+37 단원,consumer,소비자
+37 단원,responsibility,책임
+37 단원,influence,"영향,영향을 미치다"
+37 단원,obstacle,"장애,장애물"
+37 단원,property,"재산,소유물"
+37 단원,moral,"도덕,윤리,도덕적인"
+37 단원,donate,기부하다
+37 단원,predict,"예측하다,예언하다"
+38 단원,state,"국가,상태"
+38 단원,vote,"투표,투표하다"
+38 단원,party,정당
+38 단원,gap,"차이,격차"
+38 단원,court,"법정,안뜰"
+38 단원,justice,정의
+38 단원,crime,범죄
+38 단원,murder,살인
+38 단원,victim,희생자
+38 단원,argue,"논하다,주장하다"
+38 단원,decide,결정하다
+38 단원,policy,정책
+38 단원,illegal,불법적인
+38 단원,guilty,"유죄의,죄책감의"
+38 단원,innocent,"무죄의,결백한"
+38 단원,majority,"대다수,과반수"
+38 단원,minority,"소수,소수의"
+38 단원,suspect,"용의자,의심하다"
+38 단원,witness,"목격자,증인,목격하다"
+38 단원,arrest,"체포,체포하다"
+38 단원,candidate,후보자
+38 단원,government,"정부,통치"
+38 단원,elect,선출하다
+38 단원,trial,"재판,시행"
+38 단원,sentence,"형벌,문장,선고하다"
+38 단원,protest,"항의,항의하다"
+38 단원,compensate,"보상하다,변상하다"
+38 단원,diplomat,외교관
+38 단원,represent,"대표하다,나타내다"
+38 단원,democracy,민주주의
+39 단원,peace,평화
+39 단원,war,전쟁
+39 단원,century,"세기,100년"
+39 단원,age,"나이,시대,시기"
+39 단원,battle,"싸움,전투"
+39 단원,pray,"기도하다,기원하다"
+39 단원,heaven,"천국,하늘"
+39 단원,soul,"정신,영혼"
+39 단원,belief,"믿음,신념"
+39 단원,church,"교회,성당"
+39 단원,temple,"절,사원"
+39 단원,attack,"공격,공격하다"
+39 단원,weapon,무기
+39 단원,empire,제국
+39 단원,rule,"지배,통치,규칙,지배하다,통치하다"
+39 단원,religious,종교의
+39 단원,charity,"자선,자애"
+39 단원,faithful,"신실한,성실한"
+39 단원,independence,독립
+39 단원,revolution,혁명
+39 단원,Buddhism,불교
+39 단원,Christianity,기독교
+39 단원,Hinduism,힌두교
+39 단원,Islam,이슬람교
+39 단원,Judaism,유대교
+39 단원,ancient,"고대의,구식의"
+39 단원,colony,식민지
+39 단원,civilization,문명
+39 단원,spiritual,"정신적인,영적인"
+39 단원,ceremony,"의식,예식"
+40 단원,different,다른
+40 단원,global,세계적인
+40 단원,future,미래
+40 단원,race,"인종,민족,경주"
+40 단원,national,국가의
+40 단원,control,"통제,통제하다"
+40 단원,fund,기금
+40 단원,die,죽다
+40 단원,foreign,외국의
+40 단원,population,인구
+40 단원,increase,"증가,증가하다"
+40 단원,decrease,"감소,감소하다"
+40 단원,urban,도시의
+40 단원,rural,시골의
+40 단원,region,"지역,지방"
+40 단원,border,"국경,경계"
+40 단원,shocking,"충격적인,놀랄만한"
+40 단원,aid,"원조,지원,구조"
+40 단원,suffer,"(고통 등을)겪다,당하다"
+40 단원,hunger,"배고픔,기아"
+40 단원,orphan,고아
+40 단원,support,"원조,지원,원조하다,지지하다"
+40 단원,rescue,구하다
+40 단원,immigrate,(타국으로부터)이민을 오다
+40 단원,native,"~출신자,토착민,토착의,타고난"
+40 단원,ethnic,"민족의,인종의"
+40 단원,organization,기구
+40 단원,statistic,통계치
+40 단원,agreement,"협정,계약,동의,합의"
+40 단원,mutual,"서로의,상호의"
+,,
