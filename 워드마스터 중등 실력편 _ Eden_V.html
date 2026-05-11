@@ -1,0 +1,957 @@
+<html lang="ko"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#f4f7f9">
+    <title>이든_메타인지 단어학습법</title>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        
+        body { font-family: 'Pretendard', sans-serif; background-color: #e9ecef; margin: 0; padding: 0; display: flex; justify-content: center; align-items: flex-start; height: 100dvh; overflow: hidden; user-select: none; }
+        .app-container { width: 100%; max-width: 480px; height: 100dvh; background-color: #f4f7f9; display: flex; flex-direction: column; box-shadow: 0 0 25px rgba(0,0,0,0.15); overflow-y: auto; overflow-x: hidden; position: relative; }
+
+        /* 상단 패널 */
+        .top-panel { background: white; padding: 12px 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); z-index: 10; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; align-items: center;}
+        .control-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; width: 100%; max-width: 440px;}
+        .control-row select { flex: 1; min-width: 90px; padding: 6px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 13px; font-weight: bold; color: #222; }
+        
+        .lang-options { display: flex; justify-content: center; gap: 12px; font-size: 14px; font-weight: 800; color: #1a5f7a; white-space: nowrap; flex: 1; min-width: 140px;}
+        .lang-options label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+        .lang-options input[type="radio"] { transform: scale(1.3); margin-right: 4px; }
+        
+        .panel-btns { display: flex; justify-content: center; gap: 8px; flex: 1; min-width: 140px;}
+        .btn-panel { flex: 1; background: #95a5a6; color: white; border: none; padding: 8px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; line-height: 1.3; font-size: 13px; white-space: nowrap; transition: 0.2s;}
+        .btn-panel:active { transform: scale(0.95); }
+        .btn-panel.primary { background: #3498db; }
+        .btn-panel.upload { background: #8e44ad; } 
+
+        /* 상태 정보 */
+        .status-header { padding: 12px 20px; display: flex; flex-direction: column; width: 100%; box-sizing: border-box; gap: 10px; flex-shrink: 0;}
+        .mode-title { font-size: 18px; font-weight: 900; color: #222; text-align: center; margin: 0; }
+        .status-info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .badge-group { display: flex; gap: 8px; align-items: center; }
+        
+        .progress-badge { font-size: 14px; font-weight: 800; padding: 6px 12px; border-radius: 15px; white-space: nowrap; transition: background-color 0.3s, color 0.3s; }
+        .badge-default { background: #e8f4fd; color: #3498db; }
+        .badge-cycle-1 { background: #e8f4fd; color: #3498db; } 
+        .badge-cycle-2 { background: #f5eef8; color: #9b59b6; } 
+        .badge-cycle-3 { background: #fdedec; color: #e74c3c; } 
+        .badge-cycle-4 { background: #f4f6f7; color: #2c3e50; } 
+
+        .stopwatch-badge { font-size: 16px; font-weight: 900; background: #fff3e0; color: #d35400; padding: 6px 14px; border-radius: 15px; display: none; box-shadow: 0 2px 5px rgba(0,0,0,0.05); letter-spacing: 1px; white-space: nowrap;}
+
+        /* 대시보드 */
+        .dashboard { display: flex; justify-content: space-between; gap: 8px; width: 92%; max-width: 440px; margin: 0 auto 10px auto; flex-shrink: 0;}
+        .box-status { flex: 1; background: white; padding: 8px 0; border-radius: 10px; text-align: center; font-size: 13px; font-weight: bold; box-shadow: 0 1px 5px rgba(0,0,0,0.06); }
+        .box-left { color: #ff5252; border-bottom: 4px solid #ff5252; }
+        .box-mid { color: #f39c12; border-bottom: 4px solid #f39c12; }
+        .box-right { color: #2ed573; border-bottom: 4px solid #2ed573; }
+
+        .timer-container { width: 92%; max-width: 440px; height: 5px; background-color: #ddd; border-radius: 3px; overflow: hidden; display: none; margin: 0 auto 10px auto; flex-shrink: 0;}
+        .timer-bar { height: 100%; width: 100%; background-color: #ff4d4d; }
+
+        /* === 카드 영역 (1.2 : 1.0 비율) === */
+        .main-area-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: 10px 15px; box-sizing: border-box; position: relative; min-height: 280px;}
+        .main-area { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; perspective: 1000px; }
+        
+        .swipe-wrapper { width: 95%; max-width: 420px; cursor: grab; position: relative; z-index: 5; touch-action: none; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s; }
+        .swipe-wrapper:active { cursor: grabbing; }
+        
+        .card { width: 100%; aspect-ratio: 1.2 / 1.0; max-height: 55dvh; position: relative; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s, border 0.3s; transform-style: preserve-3d; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.12); border: 2px solid transparent; background: white; }
+        .card.is-flipped { transform: rotateY(180deg); }
+        
+        .cycle-1 .card { border-color: #3498db; box-shadow: 0 10px 30px rgba(52, 152, 219, 0.25); }
+        .cycle-2 .card { border-color: #9b59b6; box-shadow: 0 10px 30px rgba(155, 89, 182, 0.25); }
+        .cycle-3 .card { border-color: #e74c3c; box-shadow: 0 10px 30px rgba(231, 76, 60, 0.25); }
+        .cycle-4 .card { border-color: #2c3e50; box-shadow: 0 10px 30px rgba(44, 62, 80, 0.25); }
+
+        .card-face { width: 100%; height: 100%; position: absolute; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 18px; background: white; padding: 20px; box-sizing: border-box; text-align: center; }
+        .card-back { transform: rotateY(180deg); background-color: #f0f8ff; }
+        
+        .text-container { width: 100%; height: 75%; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 10px; box-sizing: border-box; word-break: keep-all; }
+        
+        .word-text { font-weight: 800; line-height: 1.3; transition: font-size 0.1s ease; text-align: center; width: 100%; margin: 0;}
+        .en-text { color: #1a5f7a; }
+        .ko-text { color: #333; }
+
+        .guide-text { font-size: 13px; color: #bbb; position: absolute; bottom: 15px; transition: 0.3s; }
+        .academy-logo { margin-top: 15px; font-size: 15px; font-weight: 900; color: #b2bec3; letter-spacing: 2px; text-align: center; flex-shrink: 0; padding-bottom: 10px;}
+
+        .swipe-info-guide { width: 100%; text-align: center; padding: 12px 0; background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; font-size: 13px; font-weight: bold; flex-shrink: 0;}
+        .guide-item { display: flex; flex-direction: column; gap: 4px; }
+
+        /* === 모달 === */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100dvh; background: rgba(0,0,0,0.75); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal-content { background: white; padding: 25px; border-radius: 20px; width: 85%; max-width: 440px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.4); max-height: 90dvh; display: flex; flex-direction: column; overflow-y: auto;}
+        
+        .input-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .input-group input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px; text-align: center; font-family: 'Pretendard'; }
+        
+        .btn-main { width: 100%; padding: 15px; margin-top: 10px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; font-size: 16px; color: white; transition: 0.2s; flex-shrink: 0;}
+        .btn-blue { background: #3498db; }
+        .btn-orange { background: #f39c12; }
+        .btn-green { background: #2ed573; }
+        .btn-gray { background: #95a5a6; }
+        .btn-dark { background: #34495e; margin-top: 20px;}
+        .btn-submit { background: #e67e22; border: 2px solid #d35400; box-shadow: 0 4px 10px rgba(211,84,0,0.3); animation: pulse 2s infinite;}
+        .btn-admin { background: #8e44ad; } 
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        
+        .hidden { display: none !important; }
+        .textbook-title { font-size: 20px; font-weight: 900; color: #1a5f7a; margin-bottom: 15px; background: #e8f4fd; padding: 10px; border-radius: 10px; }
+
+        /* 학습 기록 테이블 */
+        .table-responsive { width: 100%; overflow-x: auto; margin-bottom: 15px; flex: 1; min-height: 200px; border-radius: 8px; border: 1px solid #eee;}
+        .history-table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; white-space: nowrap; }
+        .history-table th, .history-table td { border: 1px solid #ddd; padding: 10px 5px; vertical-align: middle; }
+        .history-table th { background: #fdf2e9; color: #333; font-weight: bold; position: sticky; top: 0; font-size: 13px; z-index: 2;}
+        .history-table td { color: #555; }
+        .wrong-words-cell { max-height: 80px; overflow-y: auto; display: block; text-align: left; font-size: 11px; line-height: 1.4; padding: 6px; background: #fffcfc;}
+
+        @media (max-height: 650px), (orientation: landscape) {
+            .top-panel { padding: 8px 10px; gap: 6px; }
+            .control-row { gap: 6px; }
+            .control-row select { padding: 4px 6px; font-size: 12px; }
+            .btn-panel { padding: 6px; font-size: 12px; }
+            .status-header { padding: 8px 15px; flex-direction: row; justify-content: space-between; align-items: center;}
+            .mode-title { font-size: 16px; margin: 0;}
+            .status-info-row { flex: 1; justify-content: flex-end; min-width: 150px;}
+            .progress-badge, .stopwatch-badge { font-size: 13px; padding: 4px 10px; }
+            .card { max-height: 50dvh; } 
+            .academy-logo { margin-top: 5px; font-size: 12px; padding-bottom: 5px; }
+            .swipe-info-guide { padding: 6px 0; }
+        }
+    </style>
+</head>
+<body>
+
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+<div class="app-container">
+    <input type="file" id="csvFileInput" accept=".csv" onchange="handleCsvUpload(event)" style="display:none;">
+
+    <div id="modalOverlay" class="modal-overlay" style="display: flex;">
+        
+        <div id="adminModal" class="modal-content">
+            <h2 style="color:#8e44ad; margin-top:0;">Master 관리자 모드</h2>
+            <p style="font-size: 14px; color: #666;">배포할 교재 이름과 CSV를 넣어주세요.</p>
+            <input type="text" id="adminBookName" placeholder="교재 제목 입력 (예: 수능특강 1강)" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #8e44ad; margin-bottom: 15px; text-align: center; box-sizing: border-box;">
+            <button class="btn-main btn-admin" onclick="triggerCsvUpload()">1. CSV 단어장 업로드</button>
+            <button class="btn-main btn-blue" id="genFileBtn" onclick="generateStudentFile()" style="opacity: 1;">2. 학생용 파일 제작 &amp; 다운로드</button>
+            <p id="uploadStatus" style="font-size: 12px; color: #e74c3c; margin-top: 10px;">1200개 단어 준비 완료!</p>
+        </div>
+
+        <div id="startModal" class="modal-content hidden">
+            <div id="studentBookTitle" class="textbook-title">교재명이 표시됩니다</div>
+            <div class="input-group">
+                <input type="number" id="seatInput" placeholder="좌석번호" min="1" max="99">
+                <input type="text" id="nameInput" placeholder="학생이름">
+            </div>
+            <div style="background:#fdf2e9; padding:20px; border-radius:12px; margin-bottom:15px; text-align:left; font-size:16px; font-weight: bold; color: #1a5f7a;">
+                <label style="display: flex; align-items: center; margin-bottom: 10px;"><input type="radio" name="modalLang" value="en2ko" checked="" style="transform: scale(1.4); margin-right: 8px;"> 영어 ➔ 한글 연습</label>
+                <label style="display: flex; align-items: center;"><input type="radio" name="modalLang" value="ko2en" style="transform: scale(1.4); margin-right: 8px;"> 한글 ➔ 영어 연습</label>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <button class="btn-main btn-blue" style="margin:0;" onclick="initApp(1, true)">1차 학습 시작 (단어 익히기)</button>
+                <button class="btn-main btn-orange" style="margin:0;" onclick="initApp(2, true)">2차 학습 시작 (박스 분류)</button>
+                <button class="btn-main btn-green" style="margin:0;" onclick="initApp(3, true)">3차 학습 시작 (3초 테스트)</button>
+            </div>
+            <button class="btn-main btn-dark" onclick="startMode4()" style="margin-top: 8px;">4차 학습 (3차 오답 복습)</button>
+            
+            <div style="display:flex; flex-direction:column; gap: 10px; margin-top: 20px;">
+                <button class="btn-main btn-submit" style="margin:0; padding:16px; font-size:16px;" onclick="sendDataToGoogleForm()">📊 학습 결과 원장님께 전송하기</button>
+                <button class="btn-main" style="background:#2c3e50; margin:0; padding:12px; font-size:14px;" onclick="showGuideModal()">📱 홈 화면에 앱 만들기 (가이드)</button>
+            </div>
+        </div>
+
+        <div id="guideModal" class="modal-content hidden">
+            <h2 style="color:#2c3e50; margin-top:0; font-size: 22px;">📱 바탕화면 바로가기 만들기</h2>
+            <div style="text-align: left; font-size: 14px; color: #333; line-height: 1.6; background:#f4f7f9; padding:15px; border-radius:12px; margin-bottom:15px;">
+                <p style="margin-top:0;">매번 카톡에서 열 필요 없이 바탕화면에 <b>바로가기 아이콘</b>을 설치할 수 있습니다.</p>
+                <hr style="border:0; border-top:1px solid #ddd; margin:10px 0;">
+                <p style="color:#1a5f7a; font-weight:bold;">🍎 아이폰 (Safari) 사용자</p>
+                <p style="margin:5px 0 10px 0;">1. 화면 하단의 <b>[공유하기(네모와 화살표)]</b> 아이콘 클릭<br>
+                2. 메뉴를 위로 올려 <b>[홈 화면에 추가]</b> 클릭</p>
+                
+                <p style="color:#1a5f7a; font-weight:bold;">🤖 안드로이드 (Chrome) 사용자</p>
+                <p style="margin:5px 0 0 0;">1. 화면 우측 상단의 <b>[점 3개(⋮)]</b> 메뉴 클릭<br>
+                2. <b>[홈 화면에 추가]</b> 클릭</p>
+                
+                <div style="background: #fff3e0; padding: 10px; border-radius: 8px; margin-top: 15px; font-size: 12px; color: #d35400;">
+                    <b>※ 주의:</b> 카카오톡 브라우저로 열린 경우 이 기능이 안 보일 수 있습니다. 화면 우측 하단의 [점 3개]를 눌러 <b>[다른 브라우저로 열기]</b>를 꼭 먼저 선택해주세요!
+                </div>
+            </div>
+            <button class="btn-main btn-gray" onclick="closeGuideModal()">뒤로 가기</button>
+        </div>
+
+        <div id="resultModal" class="modal-content hidden">
+            <h2 id="resultTitle" style="font-size: 24px;">단계 완료!</h2>
+            <div style="display: flex; justify-content: space-around; margin: 15px 0; font-weight: bold; font-size: 15px;">
+                <div style="color:#ff5252;">좌 <br><span id="resLeft" style="font-size:22px;">0</span></div>
+                <div style="color:#f39c12;">중 <br><span id="resMid" style="font-size:22px;">0</span></div>
+                <div style="color:#2ed573;">우 <br><span id="resRight" style="font-size:22px;">0</span></div>
+            </div>
+            <p id="resultMsg" style="font-size:15px; color:#666; margin:10px 0 20px 0; line-height:1.5; font-weight: bold;"></p>
+            
+            <button class="btn-main btn-submit" onclick="sendDataToGoogleForm()">📊 학습 결과 전송하기</button>
+            <div id="resultActionBtns" style="display:flex; flex-direction:column; gap:8px; margin-top: 10px;"></div>
+        </div>
+
+        <div id="historyModal" class="modal-content hidden">
+            <h2 style="color:#333; margin-bottom: 15px; font-size: 22px;">내 학습 기록</h2>
+            <div class="table-responsive">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th style="min-width:60px;">단원/일시</th>
+                            <th>1차</th>
+                            <th>2차</th>
+                            <th>3차</th>
+                            <th>4차</th>
+                            <th style="min-width:50px;">총시간</th>
+                            <th style="min-width:110px;">3/4차 오답<br>(단어|뜻)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyList"></tbody>
+                </table>
+            </div>
+            
+            <button class="btn-main btn-submit" onclick="sendDataToGoogleForm()" style="width: 90%; margin: 0 auto 10px;">📊 현재 기록 원장님께 전송하기</button>
+            <button class="btn-main btn-export" style="width: 90%; margin: 0 auto 10px; background:#34495e;" onclick="exportToCSV()">엑셀(CSV) 백업 다운로드</button>
+            <div style="display: flex; gap: 10px; width: 90%; margin: 0 auto;">
+                <button class="btn-main btn-danger" style="margin-top: 0; background-color:#e74c3c !important; color:#ffffff !important;" onclick="clearAllHistory()">기록 초기화</button>
+                <button class="btn-main btn-gray" style="margin-top: 0;" onclick="closeHistory()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="top-panel">
+        <div class="control-row">
+            <select id="chapterSelect" onchange="handleChapterChange(event)"><option value="01 단원">01 단원</option><option value="02 단원">02 단원</option><option value="03 단원">03 단원</option><option value="04 단원">04 단원</option><option value="05 단원">05 단원</option><option value="06 단원">06 단원</option><option value="07 단원">07 단원</option><option value="08 단원">08 단원</option><option value="09 단원">09 단원</option><option value="10 단원">10 단원</option><option value="11 단원">11 단원</option><option value="12 단원">12 단원</option><option value="13 단원">13 단원</option><option value="14 단원">14 단원</option><option value="15 단원">15 단원</option><option value="16 단원">16 단원</option><option value="17 단원">17 단원</option><option value="18 단원">18 단원</option><option value="19 단원">19 단원</option><option value="20 단원">20 단원</option><option value="21 단원">21 단원</option><option value="22 단원">22 단원</option><option value="23 단원">23 단원</option><option value="24 단원">24 단원</option><option value="25 단원">25 단원</option><option value="26 단원">26 단원</option><option value="27 단원">27 단원</option><option value="28 단원">28 단원</option><option value="29 단원">29 단원</option><option value="30 단원">30 단원</option><option value="31 단원">31 단원</option><option value="32 단원">32 단원</option><option value="33 단원">33 단원</option><option value="34 단원">34 단원</option><option value="35 단원">35 단원</option><option value="36 단원">36 단원</option><option value="37 단원">37 단원</option><option value="38 단원">38 단원</option><option value="39 단원">39 단원</option><option value="40 단원">40 단원</option></select>
+            <select id="fontSizeLevel" onchange="updateUI()">
+                <option value="0.7">소</option>
+                <option value="0.9">중</option>
+                <option value="1.1" selected="">대 (기본)</option>
+                <option value="1.4">특대</option>
+                <option value="1.7">초대</option>
+            </select>
+            <button class="btn-panel upload" id="btnUpload" onclick="triggerCsvUpload()">업로드</button>
+        </div>
+        <div class="control-row">
+            <div class="lang-options">
+                <label><input type="radio" name="topLang" value="en2ko" onchange="syncLangAndUpdate()" checked=""> 영➔한</label>
+                <label><input type="radio" name="topLang" value="ko2en" onchange="syncLangAndUpdate()"> 한➔영</label>
+            </div>
+            <div class="panel-btns">
+                <button class="btn-panel" onclick="showHistory()">기록보기</button>
+                <button class="btn-panel primary" onclick="showStartModal()">처음으로</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-header">
+        <div class="mode-title" id="modeTitle">모드 선택</div>
+        <div class="status-info-row">
+            <div class="badge-group">
+                <div class="progress-badge badge-default" id="cycleBadge" style="display: none;">1회독</div>
+                <div class="progress-badge badge-default" id="progressText">0 / 0</div>
+            </div>
+            <div class="stopwatch-badge" id="stopwatchDisplay" style="display:block;">⏱ 00:00</div>
+        </div>
+    </div>
+    
+    <div class="timer-container" id="timerContainer"><div class="timer-bar" id="timerBar"></div></div>
+    
+    <div class="dashboard" id="mainDash">
+        <div class="box-status box-left">모름 <span id="cntLeft">0</span></div>
+        <div class="box-status box-mid">지연 <span id="cntMid">0</span></div>
+        <div class="box-status box-right">완벽 <span id="cntRight">0</span></div>
+    </div>
+
+    <div class="main-area-wrapper">
+        <div class="main-area" id="mainArea">
+            <div class="swipe-wrapper" id="swipeWrapper">
+                <div class="card" id="wordCard">
+                    <div class="card-face" id="cardFront"><div class="text-container"><div id="frontText" class="word-text"></div></div><div class="guide-text" id="frontGuide">터치하여 확인</div></div>
+                    <div class="card-face card-back"><div class="text-container"><div id="backText" class="word-text"></div></div><div class="guide-text" id="backGuide">밀어서 분류하세요</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="academy-logo">미사이든학원</div>
+    </div>
+    
+    <div class="swipe-info-guide" id="swipeInfoGuide">
+        <div class="guide-item" style="color:#ff5252;"><span>←</span><span>모름 / 틀림</span></div>
+        <div class="guide-item" style="color:#f39c12;"><span>↑</span><span>1~3초 걸림</span></div>
+        <div class="guide-item" style="color:#2ed573;"><span>→</span><span>0.5초 컷!</span></div>
+    </div>
+</div>
+
+<script>
+    /* =======================================================
+       🌟 환경 변수 (관리자 모드 / 학생 모드 분리)
+       ======================================================= */
+    const EMBEDDED_DATA = [{"chapter":"01 단원","word":"kind","meaning":"친절한,상냥한"},{"chapter":"01 단원","word":"clever","meaning":"영리한,재치 있는"},{"chapter":"01 단원","word":"wise","meaning":"지혜로운,슬기로운"},{"chapter":"01 단원","word":"foolish","meaning":"바보 같은,어리석은"},{"chapter":"01 단원","word":"proud","meaning":"자랑스러워하는,거만한,잘난 체하는"},{"chapter":"01 단원","word":"honest","meaning":"정직한,솔직한"},{"chapter":"01 단원","word":"gentle","meaning":"부드러운,온화한"},{"chapter":"01 단원","word":"careful","meaning":"조심성 있는"},{"chapter":"01 단원","word":"brave","meaning":"용감한"},{"chapter":"01 단원","word":"lazy","meaning":"게으른"},{"chapter":"01 단원","word":"funny","meaning":"웃기는,우스꽝스러운"},{"chapter":"01 단원","word":"calm","meaning":"차분한,침착한"},{"chapter":"01 단원","word":"character","meaning":"성격,기질"},{"chapter":"01 단원","word":"serious","meaning":"진지한,진심의"},{"chapter":"01 단원","word":"strict","meaning":"엄한,엄격한"},{"chapter":"01 단원","word":"cruel","meaning":"잔인한,무자비한"},{"chapter":"01 단원","word":"mean","meaning":"야비한,비열한"},{"chapter":"01 단원","word":"selfish","meaning":"이기적인"},{"chapter":"01 단원","word":"evil","meaning":"나쁜,사악한"},{"chapter":"01 단원","word":"curious","meaning":"호기심이 많은,알고 싶어하는"},{"chapter":"01 단원","word":"cheerful","meaning":"쾌활한,명랑한"},{"chapter":"01 단원","word":"friendly","meaning":"친한,다정한,호의적인"},{"chapter":"01 단원","word":"modest","meaning":"겸손한,신중한"},{"chapter":"01 단원","word":"generous","meaning":"관대한,(인심이)후한"},{"chapter":"01 단원","word":"sensitive","meaning":"민감한,에민한"},{"chapter":"01 단원","word":"confident","meaning":"자신만만한,확신하는"},{"chapter":"01 단원","word":"positive","meaning":"긍정적인"},{"chapter":"01 단원","word":"negative","meaning":"부정적인"},{"chapter":"01 단원","word":"optimistic","meaning":"낙관적인,낙천적인"},{"chapter":"01 단원","word":"cautious","meaning":"조심스러운,신중한,조심하는"},{"chapter":"02 단원","word":"big","meaning":"(몸집이)큰"},{"chapter":"02 단원","word":"old","meaning":"나이가 많은,늙은"},{"chapter":"02 단원","word":"tall","meaning":"키가 큰"},{"chapter":"02 단원","word":"cute","meaning":"귀여운,예쁜"},{"chapter":"02 단원","word":"pretty","meaning":"예쁜,귀여운,매우,아주"},{"chapter":"02 단원","word":"beautiful","meaning":"아름다운"},{"chapter":"02 단원","word":"ugly","meaning":"못생긴,추한"},{"chapter":"02 단원","word":"fat","meaning":"뚱뚱한,지방"},{"chapter":"02 단원","word":"overweight","meaning":"과체중의,너무 살찐"},{"chapter":"02 단원","word":"young","meaning":"어린,젊은"},{"chapter":"02 단원","word":"handsome","meaning":"(남자가) 잘 생긴"},{"chapter":"02 단원","word":"slim","meaning":"호리호리한,가냘픈,날씬한"},{"chapter":"02 단원","word":"beard","meaning":"턱수염"},{"chapter":"02 단원","word":"plain","meaning":"평범하게 생긴"},{"chapter":"02 단원","word":"good-looking","meaning":"잘 생긴"},{"chapter":"02 단원","word":"skinny","meaning":"깡마른,바싹 여윈"},{"chapter":"02 단원","word":"fit","meaning":"건강한,적합하다,꼭 맞다"},{"chapter":"02 단원","word":"muscular","meaning":"근육질의,건장한"},{"chapter":"02 단원","word":"thin","meaning":"(몸,손가락 등이)가는,가느다란,여윈,수척한,(머리카락 등이)숱이 적은"},{"chapter":"02 단원","word":"bald","meaning":"대머리의"},{"chapter":"02 단원","word":"curly","meaning":"곱슬거리는"},{"chapter":"02 단원","word":"dye","meaning":"염색하다"},{"chapter":"02 단원","word":"appearance","meaning":"외모"},{"chapter":"02 단원","word":"attractive","meaning":"매력적인"},{"chapter":"02 단원","word":"charming","meaning":"매력적인,멋진"},{"chapter":"02 단원","word":"mustache","meaning":"코밑수염"},{"chapter":"02 단원","word":"sideburns","meaning":"구레나룻"},{"chapter":"02 단원","word":"middle-aged","meaning":"중년의"},{"chapter":"02 단원","word":"build","meaning":"체격,짓다,건축하다"},{"chapter":"02 단원","word":"image","meaning":"이미지,상,형태"},{"chapter":"03 단원","word":"smile","meaning":"미소,미소 짓다"},{"chapter":"03 단원","word":"enjoy","meaning":"즐기다"},{"chapter":"03 단원","word":"cry","meaning":"울다"},{"chapter":"03 단원","word":"tear","meaning":"눈물"},{"chapter":"03 단원","word":"glad","meaning":"기쁜"},{"chapter":"03 단원","word":"angry","meaning":"화가 난"},{"chapter":"03 단원","word":"fear","meaning":"공포"},{"chapter":"03 단원","word":"joy","meaning":"기쁨,즐거움"},{"chapter":"03 단원","word":"miss","meaning":"그리워하다,놓치다"},{"chapter":"03 단원","word":"laugh","meaning":"웃다"},{"chapter":"03 단원","word":"annoyed","meaning":"짜증 난,화가 난"},{"chapter":"03 단원","word":"upset","meaning":"화가 난,기분이 상한"},{"chapter":"03 단원","word":"worried","meaning":"걱정스러운"},{"chapter":"03 단원","word":"regret","meaning":"유감,후회,후회하다"},{"chapter":"03 단원","word":"bother","meaning":"괴롭히다,방해하다"},{"chapter":"03 단원","word":"excited","meaning":"흥분한,신이 난"},{"chapter":"03 단원","word":"surprised","meaning":"놀란"},{"chapter":"03 단원","word":"pleased","meaning":"기쁜,좋아하는"},{"chapter":"03 단원","word":"horror","meaning":"공포,전율"},{"chapter":"03 단원","word":"grateful","meaning":"감사하는,고맙게 여기는"},{"chapter":"03 단원","word":"anxious","meaning":"걱정되는,근심이 되는"},{"chapter":"03 단원","word":"delighted","meaning":"매우 기뻐하는"},{"chapter":"03 단원","word":"depressed","meaning":"의기소침한,낙담한,우울한"},{"chapter":"03 단원","word":"frightened","meaning":"깜짝 놀란, 겁이 난"},{"chapter":"03 단원","word":"ashamed","meaning":"부끄러워하는"},{"chapter":"03 단원","word":"emotion","meaning":"감정"},{"chapter":"03 단원","word":"sympathy","meaning":"동정"},{"chapter":"03 단원","word":"satisfied","meaning":"만족한"},{"chapter":"03 단원","word":"disappointed","meaning":"실망한,낙담한"},{"chapter":"03 단원","word":"amused","meaning":"즐기는,즐거워하는"},{"chapter":"04 단원","word":"baker","meaning":"제빵사"},{"chapter":"04 단원","word":"captain","meaning":"선장"},{"chapter":"04 단원","word":"reporter","meaning":"기자,통신원"},{"chapter":"04 단원","word":"clerk","meaning":"점원"},{"chapter":"04 단원","word":"artist","meaning":"예술가,화가"},{"chapter":"04 단원","word":"engineer","meaning":"기사,기술자"},{"chapter":"04 단원","word":"scientist","meaning":"과학자"},{"chapter":"04 단원","word":"lawyer","meaning":"변호사"},{"chapter":"04 단원","word":"dentist","meaning":"치과의사"},{"chapter":"04 단원","word":"pilot","meaning":"조종사,조종하다"},{"chapter":"04 단원","word":"officer","meaning":"공무원,관리"},{"chapter":"04 단원","word":"gardener","meaning":"정원사"},{"chapter":"04 단원","word":"photographer","meaning":"사진사"},{"chapter":"04 단원","word":"president","meaning":"대통령"},{"chapter":"04 단원","word":"salesperson","meaning":"판매원"},{"chapter":"04 단원","word":"carpenter","meaning":"목수"},{"chapter":"04 단원","word":"businessman","meaning":"사업가"},{"chapter":"04 단원","word":"fisherman","meaning":"어부"},{"chapter":"04 단원","word":"soldier","meaning":"군인"},{"chapter":"04 단원","word":"professor","meaning":"교수"},{"chapter":"04 단원","word":"judge","meaning":"판사,심사원,심판,판단하다"},{"chapter":"04 단원","word":"hairdresser","meaning":"미용사"},{"chapter":"04 단원","word":"accountant","meaning":"회계사"},{"chapter":"04 단원","word":"novelist","meaning":"소설가"},{"chapter":"04 단원","word":"security guard","meaning":"경호원,경비원"},{"chapter":"04 단원","word":"teller","meaning":"금전출납원"},{"chapter":"04 단원","word":"astronaut","meaning":"우주비행사"},{"chapter":"04 단원","word":"detective","meaning":"탐정"},{"chapter":"04 단원","word":"secretary","meaning":"비서"},{"chapter":"04 단원","word":"illustrator","meaning":"삽화가"},{"chapter":"05 단원","word":"cap","meaning":"(테가 없는)모자"},{"chapter":"05 단원","word":"pants","meaning":"바지"},{"chapter":"05 단원","word":"sweater","meaning":"스웨터"},{"chapter":"05 단원","word":"skirt","meaning":"치마"},{"chapter":"05 단원","word":"shoes","meaning":"신발,구두"},{"chapter":"05 단원","word":"tie","meaning":"넥타이,~을 묶다,매다"},{"chapter":"05 단원","word":"T-shirt","meaning":"티셔츠"},{"chapter":"05 단원","word":"belt","meaning":"벨트,허리띠"},{"chapter":"05 단원","word":"hat","meaning":"(테가 있는)모자"},{"chapter":"05 단원","word":"uniform","meaning":"유니폼,제복"},{"chapter":"05 단원","word":"socks","meaning":"양말"},{"chapter":"05 단원","word":"gloves","meaning":"장갑"},{"chapter":"05 단원","word":"boots","meaning":"장화,부츠,목이 긴 구두"},{"chapter":"05 단원","word":"dress","meaning":"옷,의복,옷을 입다"},{"chapter":"05 단원","word":"scarf","meaning":"스카프,목도리"},{"chapter":"05 단원","word":"jacket","meaning":"재킷,상의,웃옷"},{"chapter":"05 단원","word":"shorts","meaning":"반바지,운동 팬츠"},{"chapter":"05 단원","word":"button","meaning":"단추,~에 단추를 채우다"},{"chapter":"05 단원","word":"jeans","meaning":"청바지"},{"chapter":"05 단원","word":"suit","meaning":"정장,슈트,~에게 잘 어울리다"},{"chapter":"05 단원","word":"pocket","meaning":"주머니"},{"chapter":"05 단원","word":"bow tie","meaning":"나비넥타이"},{"chapter":"05 단원","word":"heels","meaning":"굽 높은 구두"},{"chapter":"05 단원","word":"stockings","meaning":"긴 양말,스타킹"},{"chapter":"05 단원","word":"sandals","meaning":"샌들"},{"chapter":"05 단원","word":"wallet","meaning":"지갑"},{"chapter":"05 단원","word":"purse","meaning":"돈주머니,지갑"},{"chapter":"05 단원","word":"vest","meaning":"조끼"},{"chapter":"05 단원","word":"overalls","meaning":"멜빵 바지"},{"chapter":"05 단원","word":"athletic shoes","meaning":"운동화"},{"chapter":"06 단원","word":"milk","meaning":"우유"},{"chapter":"06 단원","word":"butter","meaning":"버터"},{"chapter":"06 단원","word":"bread","meaning":"빵"},{"chapter":"06 단원","word":"jam","meaning":"잼"},{"chapter":"06 단원","word":"meat","meaning":"고기"},{"chapter":"06 단원","word":"sugar","meaning":"설탕"},{"chapter":"06 단원","word":"salt","meaning":"소금"},{"chapter":"06 단원","word":"cookie","meaning":"쿠키"},{"chapter":"06 단원","word":"soup","meaning":"수프"},{"chapter":"06 단원","word":"fish","meaning":"생선"},{"chapter":"06 단원","word":"jelly","meaning":"젤리"},{"chapter":"06 단원","word":"beef","meaning":"쇠고기"},{"chapter":"06 단원","word":"steak","meaning":"스테이크"},{"chapter":"06 단원","word":"pork","meaning":"돼지고기"},{"chapter":"06 단원","word":"pepper","meaning":"후추,고추"},{"chapter":"06 단원","word":"diet","meaning":"다이어트,식이요법"},{"chapter":"06 단원","word":"snack","meaning":"간식"},{"chapter":"06 단원","word":"egg","meaning":"계란"},{"chapter":"06 단원","word":"rice","meaning":"밥"},{"chapter":"06 단원","word":"flour","meaning":"밀가루"},{"chapter":"06 단원","word":"honey","meaning":"꿀"},{"chapter":"06 단원","word":"mustard","meaning":"겨자"},{"chapter":"06 단원","word":"noodle","meaning":"국수"},{"chapter":"06 단원","word":"pickle","meaning":"(오이 따위 채소를)절인 것,피클,절이다"},{"chapter":"06 단원","word":"stew","meaning":"스튜,찌개"},{"chapter":"06 단원","word":"cereal","meaning":"곡물 식품,시리얼,곡물의"},{"chapter":"06 단원","word":"meal","meaning":"식사"},{"chapter":"06 단원","word":"side dish","meaning":"반찬,주된 요리에 곁들이는 요리"},{"chapter":"06 단원","word":"appetizer","meaning":"애피타이저,식욕을 돋우는 것"},{"chapter":"06 단원","word":"powder","meaning":"가루"},{"chapter":"07 단원","word":"bake","meaning":"굽다"},{"chapter":"07 단원","word":"break","meaning":"깨뜨리다"},{"chapter":"07 단원","word":"fry","meaning":"튀기다"},{"chapter":"07 단원","word":"boil","meaning":"끓이다"},{"chapter":"07 단원","word":"mix","meaning":"섞다"},{"chapter":"07 단원","word":"oven","meaning":"오븐"},{"chapter":"07 단원","word":"glass","meaning":"컵,유리잔,한 컵(의 양)"},{"chapter":"07 단원","word":"knife","meaning":"칼"},{"chapter":"07 단원","word":"spoon","meaning":"숟가락"},{"chapter":"07 단원","word":"basket","meaning":"바구니"},{"chapter":"07 단원","word":"handle","meaning":"손잡이"},{"chapter":"07 단원","word":"pour","meaning":"붓다"},{"chapter":"07 단원","word":"roll","meaning":"밀다"},{"chapter":"07 단원","word":"slice","meaning":"얇게 썰다"},{"chapter":"07 단원","word":"refrigerator","meaning":"냉장고"},{"chapter":"07 단원","word":"pot","meaning":"(속이 깊은)냄비"},{"chapter":"07 단원","word":"bowl","meaning":"(우묵한)그릇,통"},{"chapter":"07 단원","word":"plate","meaning":"접시"},{"chapter":"07 단원","word":"tray","meaning":"쟁반"},{"chapter":"07 단원","word":"jar","meaning":"(입구가 넓은)병,단지"},{"chapter":"07 단원","word":"pan","meaning":"(납작한)냄비,팬"},{"chapter":"07 단원","word":"beat","meaning":"휘저어 섞다"},{"chapter":"07 단원","word":"steam","meaning":"찌다"},{"chapter":"07 단원","word":"scoop","meaning":"주걱,국자"},{"chapter":"07 단원","word":"grill","meaning":"(열로)굽다,익히다"},{"chapter":"07 단원","word":"kettle","meaning":"주전자"},{"chapter":"07 단원","word":"opener","meaning":"따개"},{"chapter":"07 단원","word":"cabinet","meaning":"진열대"},{"chapter":"07 단원","word":"recipe","meaning":"요리법"},{"chapter":"07 단원","word":"blender","meaning":"부엌용 믹서기"},{"chapter":"08 단원","word":"garden","meaning":"정원,정원을 가꾸다"},{"chapter":"08 단원","word":"kitchen","meaning":"부엌"},{"chapter":"08 단원","word":"apartment","meaning":"아파트"},{"chapter":"08 단원","word":"window","meaning":"창문"},{"chapter":"08 단원","word":"yard","meaning":"마당"},{"chapter":"08 단원","word":"knock","meaning":"노크를 하다,(문 등을)두드리다"},{"chapter":"08 단원","word":"pet","meaning":"애완동물"},{"chapter":"08 단원","word":"soap","meaning":"비누"},{"chapter":"08 단원","word":"towel","meaning":"타월,수건"},{"chapter":"08 단원","word":"curtain","meaning":"커튼"},{"chapter":"08 단원","word":"mirror","meaning":"거울"},{"chapter":"08 단원","word":"gate","meaning":"문"},{"chapter":"08 단원","word":"bedroom","meaning":"침실"},{"chapter":"08 단원","word":"roof","meaning":"지붕"},{"chapter":"08 단원","word":"garage","meaning":"차고"},{"chapter":"08 단원","word":"laundry","meaning":"세탁물"},{"chapter":"08 단원","word":"water","meaning":"물,물주다"},{"chapter":"08 단원","word":"lawn","meaning":"잔디"},{"chapter":"08 단원","word":"floor","meaning":"마루,바닥,층"},{"chapter":"08 단원","word":"feed","meaning":"먹이다"},{"chapter":"08 단원","word":"bathroom","meaning":"욕실"},{"chapter":"08 단원","word":"ceiling","meaning":"천장"},{"chapter":"08 단원","word":"shelf","meaning":"선반"},{"chapter":"08 단원","word":"drawer","meaning":"서랍"},{"chapter":"08 단원","word":"lamp","meaning":"전기스탠드,램프"},{"chapter":"08 단원","word":"sheet","meaning":"시트,홑이불"},{"chapter":"08 단원","word":"stair","meaning":"계단,층계"},{"chapter":"08 단원","word":"scale","meaning":"체중계,저울"},{"chapter":"08 단원","word":"sink","meaning":"싱크대,개수대"},{"chapter":"08 단원","word":"tap","meaning":"수도꼭지"},{"chapter":"09 단원","word":"come","meaning":"오다,도달하다,도착하다"},{"chapter":"09 단원","word":"go","meaning":"가다"},{"chapter":"09 단원","word":"park","meaning":"주차하다,공원"},{"chapter":"09 단원","word":"stop","meaning":"정류장,정차하다,그만두다"},{"chapter":"09 단원","word":"drive","meaning":"운전하다"},{"chapter":"09 단원","word":"subway","meaning":"지하철"},{"chapter":"09 단원","word":"plane","meaning":"비행기"},{"chapter":"09 단원","word":"ticket","meaning":"티켓,표"},{"chapter":"09 단원","word":"seat","meaning":"좌석"},{"chapter":"09 단원","word":"road","meaning":"길,도로"},{"chapter":"09 단원","word":"fare","meaning":"요금"},{"chapter":"09 단원","word":"bicycle","meaning":"자전거"},{"chapter":"09 단원","word":"cross","meaning":"~을 건너다,십자가"},{"chapter":"09 단원","word":"track","meaning":"철도 선로,궤도"},{"chapter":"09 단원","word":"rail","meaning":"철로"},{"chapter":"09 단원","word":"curve","meaning":"굽이,커브,굴곡,구부러지다"},{"chapter":"09 단원","word":"sign","meaning":"표지(판),서명하다"},{"chapter":"09 단원","word":"station","meaning":"역,정거장,(관공)서,국"},{"chapter":"09 단원","word":"wheel","meaning":"바퀴"},{"chapter":"09 단원","word":"license","meaning":"면허증"},{"chapter":"09 단원","word":"accident","meaning":"사고"},{"chapter":"09 단원","word":"traffic","meaning":"교통(량),교통의"},{"chapter":"09 단원","word":"forward","meaning":"앞쪽으로,앞을 향하여"},{"chapter":"09 단원","word":"transfer","meaning":"갈아타다,나르다"},{"chapter":"09 단원","word":"passenger","meaning":"승객"},{"chapter":"09 단원","word":"harbor","meaning":"항구"},{"chapter":"09 단원","word":"gas","meaning":"휘발유,가솔린"},{"chapter":"09 단원","word":"platform","meaning":"(역의)플랫폼,승강장"},{"chapter":"09 단원","word":"transport","meaning":"수송하다,운송하다"},{"chapter":"09 단원","word":"crash","meaning":"충돌,충돌하다"},{"chapter":"10 단원","word":"glue","meaning":"풀,풀을 바르다,접착하다"},{"chapter":"10 단원","word":"ruler","meaning":"자"},{"chapter":"10 단원","word":"scissors","meaning":"가위"},{"chapter":"10 단원","word":"eraser","meaning":"지우개"},{"chapter":"10 단원","word":"desk","meaning":"책상"},{"chapter":"10 단원","word":"chair","meaning":"의자"},{"chapter":"10 단원","word":"table","meaning":"탁자"},{"chapter":"10 단원","word":"pencil","meaning":"연필"},{"chapter":"10 단원","word":"paper","meaning":"종이"},{"chapter":"10 단원","word":"room","meaning":"방,실"},{"chapter":"10 단원","word":"calendar","meaning":"달력"},{"chapter":"10 단원","word":"printer","meaning":"인쇄기,프린터"},{"chapter":"10 단원","word":"envelope","meaning":"봉투"},{"chapter":"10 단원","word":"folder","meaning":"폴더,서류철"},{"chapter":"10 단원","word":"call","meaning":"통화,전화를 걸다"},{"chapter":"10 단원","word":"letter","meaning":"편지"},{"chapter":"10 단원","word":"seal","meaning":"도장,인감,봉인,날인하다,봉하다"},{"chapter":"10 단원","word":"clip","meaning":"클립,자르다,깎다"},{"chapter":"10 단원","word":"pin","meaning":"핀,핀으로 고정하다"},{"chapter":"10 단원","word":"message","meaning":"메시지"},{"chapter":"10 단원","word":"bookcase","meaning":"책장,책꽂이"},{"chapter":"10 단원","word":"manager","meaning":"관리자"},{"chapter":"10 단원","word":"calculator","meaning":"계산기"},{"chapter":"10 단원","word":"stationery","meaning":"문구류"},{"chapter":"10 단원","word":"staple","meaning":"스테이플러로 고정시키다"},{"chapter":"10 단원","word":"punch","meaning":"(표에 구멍을 뚫는) 펀치, 구멍을 뚫다"},{"chapter":"10 단원","word":"highlighter","meaning":"형광 컬러 펜"},{"chapter":"10 단원","word":"document","meaning":"서류,문서"},{"chapter":"10 단원","word":"printout","meaning":"출력물"},{"chapter":"10 단원","word":"photocopy","meaning":"사진 복사물,사진 복사하다"},{"chapter":"11 단원","word":"building","meaning":"건물"},{"chapter":"11 단원","word":"bakery","meaning":"제과점"},{"chapter":"11 단원","word":"bank","meaning":"은행,둑,제방"},{"chapter":"11 단원","word":"bookstore","meaning":"서점"},{"chapter":"11 단원","word":"fire station","meaning":"소방서"},{"chapter":"11 단원","word":"hospital","meaning":"병원"},{"chapter":"11 단원","word":"post office","meaning":"우체국"},{"chapter":"11 단원","word":"museum","meaning":"박물관"},{"chapter":"11 단원","word":"city hall","meaning":"시청"},{"chapter":"11 단원","word":"police station","meaning":"경찰서"},{"chapter":"11 단원","word":"drugstore","meaning":"약국"},{"chapter":"11 단원","word":"trash","meaning":"쓰레기"},{"chapter":"11 단원","word":"street","meaning":"거리"},{"chapter":"11 단원","word":"avenue","meaning":"도시의 큰 대로, 넓은 길"},{"chapter":"11 단원","word":"block","meaning":"블록,덩어리,장애물,막다,봉쇄하다"},{"chapter":"11 단원","word":"straight","meaning":"똑바른,직선의,곧장,일직선으로"},{"chapter":"11 단원","word":"corner","meaning":"모퉁이,구석"},{"chapter":"11 단원","word":"turn","meaning":"회전,방향 전환,돌다"},{"chapter":"11 단원","word":"left","meaning":"왼쪽"},{"chapter":"11 단원","word":"wrong","meaning":"잘못된"},{"chapter":"11 단원","word":"pedestrian","meaning":"보행자"},{"chapter":"11 단원","word":"department store","meaning":"백화점"},{"chapter":"11 단원","word":"sidewalk","meaning":"인도,보도"},{"chapter":"11 단원","word":"crosswalk","meaning":"횡단보도"},{"chapter":"11 단원","word":"intersection","meaning":"교차로"},{"chapter":"11 단원","word":"patrol","meaning":"순찰대,순찰 경관"},{"chapter":"11 단원","word":"signal","meaning":"신호,신호기"},{"chapter":"11 단원","word":"booth","meaning":"(공중)전화 박스"},{"chapter":"11 단원","word":"highway","meaning":"고속도로"},{"chapter":"11 단원","word":"sewer","meaning":"하수구"},{"chapter":"12 단원","word":"iron","meaning":"다리미,철,다림질하다"},{"chapter":"12 단원","word":"lift","meaning":"올리다,들어 올리다"},{"chapter":"12 단원","word":"wash","meaning":"세탁물,씻다"},{"chapter":"12 단원","word":"mop","meaning":"대걸레,대걸레로 닦다"},{"chapter":"12 단원","word":"brush","meaning":"솔,솔질,솔질하다"},{"chapter":"12 단원","word":"daily","meaning":"매일의,나날의"},{"chapter":"12 단원","word":"hang","meaning":"걸다,매달리다"},{"chapter":"12 단원","word":"pick","meaning":"골라잡다,따다"},{"chapter":"12 단원","word":"hammer","meaning":"망치"},{"chapter":"12 단원","word":"switch","meaning":"스위치"},{"chapter":"12 단원","word":"hook","meaning":"갈고리,(물건을 거는) 고리"},{"chapter":"12 단원","word":"ladder","meaning":"사다리"},{"chapter":"12 단원","word":"carry","meaning":"나르다"},{"chapter":"12 단원","word":"tool","meaning":"도구,연장"},{"chapter":"12 단원","word":"drill","meaning":"송곳,구멍을 뚫다"},{"chapter":"12 단원","word":"saw","meaning":"톱,톱질하다"},{"chapter":"12 단원","word":"bucket","meaning":"물통,양동이"},{"chapter":"12 단원","word":"housework","meaning":"가사,집안일"},{"chapter":"12 단원","word":"dig","meaning":"파다,파헤치다"},{"chapter":"12 단원","word":"sweep","meaning":"청소하다,쓸다"},{"chapter":"12 단원","word":"fold","meaning":"개다,접다"},{"chapter":"12 단원","word":"rake","meaning":"갈퀴,긁어모으다"},{"chapter":"12 단원","word":"trim","meaning":"깎아 다듬다"},{"chapter":"12 단원","word":"polish","meaning":"닦다,윤을 내다"},{"chapter":"12 단원","word":"screw","meaning":"나사,나사로 죄다,비틀다"},{"chapter":"12 단원","word":"broom","meaning":"빗자루"},{"chapter":"12 단원","word":"shovel","meaning":"삽"},{"chapter":"12 단원","word":"wrench","meaning":"렌치(너트를 죄는 기구)"},{"chapter":"12 단원","word":"flashlight","meaning":"손전등"},{"chapter":"12 단원","word":"outlet","meaning":"(전기)콘센트,출구,배출구"},{"chapter":"13 단원","word":"bottle","meaning":"병"},{"chapter":"13 단원","word":"package","meaning":"(포장용)용기,상자,꾸러미,소포"},{"chapter":"13 단원","word":"can","meaning":"깡통,통조림,(음식물을)통조림으로 만들다"},{"chapter":"13 단원","word":"box","meaning":"상자"},{"chapter":"13 단원","word":"tube","meaning":"튜브,짜내어 쓰게 된 용기"},{"chapter":"13 단원","word":"item","meaning":"항목,품목"},{"chapter":"13 단원","word":"pack","meaning":"꾸러미,한 상자"},{"chapter":"13 단원","word":"bag","meaning":"자루,봉지,가방"},{"chapter":"13 단원","word":"ice","meaning":"얼음"},{"chapter":"13 단원","word":"bar","meaning":"막대기,막대기 모양의 것"},{"chapter":"13 단원","word":"piece","meaning":"조각"},{"chapter":"13 단원","word":"counter","meaning":"계산대"},{"chapter":"13 단원","word":"spray","meaning":"스프레이,분무기,뿌리다"},{"chapter":"13 단원","word":"bin","meaning":"(뚜껑 달린) 큰 상자"},{"chapter":"13 단원","word":"smoked","meaning":"훈제된"},{"chapter":"13 단원","word":"fresh","meaning":"신선한"},{"chapter":"13 단원","word":"grain","meaning":"곡물,곡류"},{"chapter":"13 단원","word":"vegetable","meaning":"야채"},{"chapter":"13 단원","word":"cart","meaning":"손수레,카트"},{"chapter":"13 단원","word":"seafood","meaning":"해산물"},{"chapter":"13 단원","word":"cashier","meaning":"계산원"},{"chapter":"13 단원","word":"freezer","meaning":"냉동고"},{"chapter":"13 단원","word":"frozen food","meaning":"냉동식품"},{"chapter":"13 단원","word":"grocery","meaning":"식료 잡화점,식품점"},{"chapter":"13 단원","word":"container","meaning":"용기"},{"chapter":"13 단원","word":"aisle","meaning":"통로"},{"chapter":"13 단원","word":"dairy","meaning":"우유의,유제품의"},{"chapter":"13 단원","word":"bundle","meaning":"(한 묶음의)다발,뭉치"},{"chapter":"13 단원","word":"pile","meaning":"더미"},{"chapter":"13 단원","word":"cash register","meaning":"금전 등록기"},{"chapter":"14 단원","word":"long","meaning":"긴"},{"chapter":"14 단원","word":"short","meaning":"짧은"},{"chapter":"14 단원","word":"dirty","meaning":"더러운,청소하다,깨끗이 하다"},{"chapter":"14 단원","word":"clean","meaning":"깨끗한"},{"chapter":"14 단원","word":"high","meaning":"높은"},{"chapter":"14 단원","word":"low","meaning":"낮은"},{"chapter":"14 단원","word":"new","meaning":"새로운"},{"chapter":"14 단원","word":"open","meaning":"열린,열다"},{"chapter":"14 단원","word":"heavy","meaning":"무거운"},{"chapter":"14 단원","word":"full","meaning":"가득 찬,배부른"},{"chapter":"14 단원","word":"dark","meaning":"어두운"},{"chapter":"14 단원","word":"deep","meaning":"깊은"},{"chapter":"14 단원","word":"round","meaning":"둥근,한 바퀴를 도는"},{"chapter":"14 단원","word":"light","meaning":"가벼운,(양이)적은,빛"},{"chapter":"14 단원","word":"famous","meaning":"유명한"},{"chapter":"14 단원","word":"colorful","meaning":"다채로운,화려한"},{"chapter":"14 단원","word":"empty","meaning":"텅 빈"},{"chapter":"14 단원","word":"metal","meaning":"금속"},{"chapter":"14 단원","word":"plastic","meaning":"플라스틱의,비닐의,성형의"},{"chapter":"14 단원","word":"wide","meaning":"넓은"},{"chapter":"14 단원","word":"tight","meaning":"꽉 끼는"},{"chapter":"14 단원","word":"loose","meaning":"헐렁한"},{"chapter":"14 단원","word":"sharp","meaning":"날카로운"},{"chapter":"14 단원","word":"shallow","meaning":"얕은"},{"chapter":"14 단원","word":"oval","meaning":"달걀 모양,타원형,달걀 모양의,타원형의"},{"chapter":"14 단원","word":"square","meaning":"정사각형,광장,정사각형의,사각의"},{"chapter":"14 단원","word":"crack","meaning":"(갈라진)틈,틈새"},{"chapter":"14 단원","word":"glitter","meaning":"빛나다"},{"chapter":"14 단원","word":"firm","meaning":"단단한,굳은,회사"},{"chapter":"14 단원","word":"wooden","meaning":"나무로 만든"},{"chapter":"15 단원","word":"see","meaning":"보다,알다,이해하다"},{"chapter":"15 단원","word":"watch","meaning":"지켜보다"},{"chapter":"15 단원","word":"look","meaning":"보다,바라보다"},{"chapter":"15 단원","word":"hear","meaning":"듣다"},{"chapter":"15 단원","word":"listen","meaning":"주의해서 듣다"},{"chapter":"15 단원","word":"smell","meaning":"냄새,후각,냄새가 나다,냄새를 맡다"},{"chapter":"15 단원","word":"loud","meaning":"(소리가)큰,시끄러운"},{"chapter":"15 단원","word":"bad","meaning":"불쾌한,나쁜,(음식이)상한"},{"chapter":"15 단원","word":"taste","meaning":"맛,미각,맛보다,맛이 나다"},{"chapter":"15 단원","word":"feel","meaning":"느끼다"},{"chapter":"15 단원","word":"hard","meaning":"굳은,단단한,어려운"},{"chapter":"15 단원","word":"noise","meaning":"소음"},{"chapter":"15 단원","word":"bitter","meaning":"쓴,쓴맛의"},{"chapter":"15 단원","word":"sweet","meaning":"달콤한"},{"chapter":"15 단원","word":"sour","meaning":"신맛의,신"},{"chapter":"15 단원","word":"juicy","meaning":"즙이 많은"},{"chapter":"15 단원","word":"touch","meaning":"촉감,접촉,만지다,건드리다"},{"chapter":"15 단원","word":"rough","meaning":"거친,가공하지 않은"},{"chapter":"15 단원","word":"soft","meaning":"부드러운"},{"chapter":"15 단원","word":"sense","meaning":"감각,감지하다"},{"chapter":"15 단원","word":"objective","meaning":"객관적인"},{"chapter":"15 단원","word":"sight","meaning":"시각,시력,보기,일견"},{"chapter":"15 단원","word":"stare","meaning":"빤히 보다,응시하다"},{"chapter":"15 단원","word":"whisper","meaning":"속삭임,속삭이다"},{"chapter":"15 단원","word":"audio","meaning":"음의 재생,오디오,음성의,오디오의"},{"chapter":"15 단원","word":"flavor","meaning":"맛,풍미"},{"chapter":"15 단원","word":"smooth","meaning":"부드러운,부드럽게 하다"},{"chapter":"15 단원","word":"notice","meaning":"주의,주목,주의하다,알아차리다"},{"chapter":"15 단원","word":"observe","meaning":"관찰하다,알아차리다"},{"chapter":"15 단원","word":"discover","meaning":"발견하다,알아내다"},{"chapter":"16 단원","word":"health","meaning":"건강"},{"chapter":"16 단원","word":"weak","meaning":"몸이 약한,허약한"},{"chapter":"16 단원","word":"sick","meaning":"(몸이)아픈,병든"},{"chapter":"16 단원","word":"cough","meaning":"기침,기침하다"},{"chapter":"16 단원","word":"fever","meaning":"열,발열"},{"chapter":"16 단원","word":"sore","meaning":"아픈,쑤시는"},{"chapter":"16 단원","word":"cut","meaning":"베인 상처,상처를 내다,~을 베다"},{"chapter":"16 단원","word":"pain","meaning":"고통"},{"chapter":"16 단원","word":"medicine","meaning":"약"},{"chapter":"16 단원","word":"ache","meaning":"통증,아픔,통증이 있다"},{"chapter":"16 단원","word":"dizzy","meaning":"어지러운"},{"chapter":"16 단원","word":"disease","meaning":"병,질병"},{"chapter":"16 단원","word":"cancer","meaning":"암"},{"chapter":"16 단원","word":"blind","meaning":"눈 먼,시각 장애의"},{"chapter":"16 단원","word":"deaf","meaning":"귀가 먹은,청각 장애가 있는"},{"chapter":"16 단원","word":"patient","meaning":"환자,끈기 있는,참을성 있는"},{"chapter":"16 단원","word":"cure","meaning":"치료법,치료하다"},{"chapter":"16 단원","word":"relax","meaning":"쉬게 하다,편히 쉬다"},{"chapter":"16 단원","word":"burn","meaning":"화상,화상을 입다(입히다),(햇볕에)타다"},{"chapter":"16 단원","word":"symptom","meaning":"증상"},{"chapter":"16 단원","word":"wound","meaning":"상처,상처를 내다"},{"chapter":"16 단원","word":"vomit","meaning":"토하다"},{"chapter":"16 단원","word":"sneeze","meaning":"재채기하다"},{"chapter":"16 단원","word":"bruise","meaning":"멍,타박상"},{"chapter":"16 단원","word":"examine","meaning":"진찰하다"},{"chapter":"16 단원","word":"recover","meaning":"회복하다"},{"chapter":"16 단원","word":"prevent","meaning":"예방하다,막다"},{"chapter":"16 단원","word":"medical","meaning":"의학의"},{"chapter":"16 단원","word":"operate","meaning":"수술하다"},{"chapter":"16 단원","word":"emergency","meaning":"비상사태,응급"},{"chapter":"17 단원","word":"trip","meaning":"여행"},{"chapter":"17 단원","word":"airport","meaning":"공항"},{"chapter":"17 단원","word":"sightseeing","meaning":"관광"},{"chapter":"17 단원","word":"tourist","meaning":"여행자,관광객"},{"chapter":"17 단원","word":"guide","meaning":"안내자,가이드,안내하다"},{"chapter":"17 단원","word":"route","meaning":"(비행기,기차의)노선,경로"},{"chapter":"17 단원","word":"visa","meaning":"비자,사증"},{"chapter":"17 단원","word":"flight","meaning":"비행"},{"chapter":"17 단원","word":"reserve","meaning":"예약하다"},{"chapter":"17 단원","word":"cancel","meaning":"취소,취소하다"},{"chapter":"17 단원","word":"scenery","meaning":"풍경"},{"chapter":"17 단원","word":"apply","meaning":"신청하다"},{"chapter":"17 단원","word":"passport","meaning":"여권"},{"chapter":"17 단원","word":"insurance","meaning":"보험"},{"chapter":"17 단원","word":"reach","meaning":"도착하다,도달하다"},{"chapter":"17 단원","word":"attendant","meaning":"안내원,시중드는 사람"},{"chapter":"17 단원","word":"board","meaning":"탑승하다,승차하다"},{"chapter":"17 단원","word":"depart","meaning":"출발하다"},{"chapter":"17 단원","word":"arrive","meaning":"도착하다"},{"chapter":"17 단원","word":"land","meaning":"땅,착륙하다"},{"chapter":"17 단원","word":"abroad","meaning":"해외로"},{"chapter":"17 단원","word":"itinerary","meaning":"여행 일정,여행 일기"},{"chapter":"17 단원","word":"baggage","meaning":"짐,수하물"},{"chapter":"17 단원","word":"claim","meaning":"요구,청구,주장,요구하다,주장하다"},{"chapter":"17 단원","word":"check","meaning":"수표,점검,조사하다,점검하다"},{"chapter":"17 단원","word":"destination","meaning":"목적지"},{"chapter":"17 단원","word":"security","meaning":"보안,안전"},{"chapter":"17 단원","word":"delay","meaning":"지연,연기,연기하다"},{"chapter":"17 단원","word":"jet lag","meaning":"시차증(여행 시차에 의한 피로,신경 과민)"},{"chapter":"17 단원","word":"souvenir","meaning":"기념품"},{"chapter":"18 단원","word":"movie","meaning":"영화"},{"chapter":"18 단원","word":"puzzle","meaning":"수수께끼,퍼즐"},{"chapter":"18 단원","word":"game","meaning":"게임,시합"},{"chapter":"18 단원","word":"interest","meaning":"흥미,관심"},{"chapter":"18 단원","word":"read","meaning":"읽다"},{"chapter":"18 단원","word":"paint","meaning":"페인트칠을 하다,그림을 그리다"},{"chapter":"18 단원","word":"sing","meaning":"노래를 부르다,노래하다"},{"chapter":"18 단원","word":"draw","meaning":"그림을 그리다"},{"chapter":"18 단원","word":"picture","meaning":"사진,그림"},{"chapter":"18 단원","word":"musical","meaning":"뮤지컬,음악의"},{"chapter":"18 단원","word":"dance","meaning":"춤,춤을 추다"},{"chapter":"18 단원","word":"collect","meaning":"모으다"},{"chapter":"18 단원","word":"chess","meaning":"체스,서양 장기"},{"chapter":"18 단원","word":"hike","meaning":"하이킹하다,도보여행하다"},{"chapter":"18 단원","word":"comic","meaning":"희극의,만화의"},{"chapter":"18 단원","word":"camp","meaning":"야영,캠프,야영지,야영하다"},{"chapter":"18 단원","word":"pleasure","meaning":"기쁨"},{"chapter":"18 단원","word":"stamp","meaning":"우표,도장"},{"chapter":"18 단원","word":"jog","meaning":"조깅하다"},{"chapter":"18 단원","word":"magic","meaning":"마법,주술,마법의"},{"chapter":"18 단원","word":"fix","meaning":"고치다,고정시키다"},{"chapter":"18 단원","word":"favorite","meaning":"가장 좋아하는"},{"chapter":"18 단원","word":"pen pal","meaning":"편지 친구"},{"chapter":"18 단원","word":"mania","meaning":"열광"},{"chapter":"18 단원","word":"volunteer","meaning":"지원자,자원봉사자"},{"chapter":"18 단원","word":"chat","meaning":"잡담하다"},{"chapter":"18 단원","word":"model","meaning":"모형,모델,모형의,모델이 되는"},{"chapter":"18 단원","word":"knit","meaning":"뜨개질을 하다"},{"chapter":"18 단원","word":"leisure","meaning":"여가,한가한 시간,한가한"},{"chapter":"18 단원","word":"involve","meaning":"수반하다,필요로 하다"},{"chapter":"19 단원","word":"exercise","meaning":"운동,연습,운동하다"},{"chapter":"19 단원","word":"gym","meaning":"체육관"},{"chapter":"19 단원","word":"stretch","meaning":"몸을 쭉 뻗다,쭉 내밀다"},{"chapter":"19 단원","word":"swim","meaning":"수영하다"},{"chapter":"19 단원","word":"kick","meaning":"(걷어) 차기,발길질,발로 차다"},{"chapter":"19 단원","word":"pass","meaning":"(공을)패스하다,지나가다"},{"chapter":"19 단원","word":"outdoor","meaning":"집밖의,실외의"},{"chapter":"19 단원","word":"player","meaning":"경기자,선수"},{"chapter":"19 단원","word":"bowling","meaning":"볼링"},{"chapter":"19 단원","word":"soccer","meaning":"축구"},{"chapter":"19 단원","word":"goal","meaning":"(축구의)골,득점,목적,목표"},{"chapter":"19 단원","word":"shoot","meaning":"사격,쏘다,공을 차다"},{"chapter":"19 단원","word":"coach","meaning":"코치,지도자,마차,코치하다,지도하다"},{"chapter":"19 단원","word":"basketball","meaning":"농구"},{"chapter":"19 단원","word":"baseball","meaning":"야구"},{"chapter":"19 단원","word":"base","meaning":"(야구의)루,누,토대,기초"},{"chapter":"19 단원","word":"match","meaning":"시합,경기,경쟁 상대"},{"chapter":"19 단원","word":"batter","meaning":"타자"},{"chapter":"19 단원","word":"throw","meaning":"투구,던짐,던지다"},{"chapter":"19 단원","word":"catch","meaning":"잡다,공을 받다"},{"chapter":"19 단원","word":"racket","meaning":"라켓,라켓으로 치다"},{"chapter":"19 단원","word":"athlete","meaning":"운동선수"},{"chapter":"19 단원","word":"defender","meaning":"수비수"},{"chapter":"19 단원","word":"score","meaning":"(경기)득점,점수,득점하다"},{"chapter":"19 단원","word":"referee","meaning":"(운동경기)심판,심판을 보다"},{"chapter":"19 단원","word":"champion","meaning":"챔피언,우승자"},{"chapter":"19 단원","word":"sweat","meaning":"땀,(땀이 나도록)힘든 일,땀을 흘리다"},{"chapter":"19 단원","word":"dive","meaning":"잠수,잠수하다,물 속에 뛰어들다"},{"chapter":"19 단원","word":"skate","meaning":"스케이트 구두,스케이트를 타다"},{"chapter":"19 단원","word":"surf","meaning":"파도,파도를 타다,서핑하다"},{"chapter":"20 단원","word":"shop","meaning":"가게,물건을 사다"},{"chapter":"20 단원","word":"store","meaning":"가게,상점"},{"chapter":"20 단원","word":"gift","meaning":"선물"},{"chapter":"20 단원","word":"cheap","meaning":"값싼,저렴한"},{"chapter":"20 단원","word":"expensive","meaning":"값비싼"},{"chapter":"20 단원","word":"sale","meaning":"판매,염가 판매,세일"},{"chapter":"20 단원","word":"size","meaning":"크기"},{"chapter":"20 단원","word":"buy","meaning":"사다"},{"chapter":"20 단원","word":"sell","meaning":"팔다"},{"chapter":"20 단원","word":"choose","meaning":"선택하다"},{"chapter":"20 단원","word":"pay","meaning":"지불하다"},{"chapter":"20 단원","word":"business","meaning":"영업"},{"chapter":"20 단원","word":"tax","meaning":"세금"},{"chapter":"20 단원","word":"mart","meaning":"시장,거래소,슈퍼마켓"},{"chapter":"20 단원","word":"goods","meaning":"상품,물품"},{"chapter":"20 단원","word":"tag","meaning":"정가표"},{"chapter":"20 단원","word":"medium","meaning":"중간,중간의"},{"chapter":"20 단원","word":"cash","meaning":"현금"},{"chapter":"20 단원","word":"change","meaning":"거스름돈,변화,바꾸다"},{"chapter":"20 단원","word":"customer","meaning":"고객"},{"chapter":"20 단원","word":"display","meaning":"전시,진열,전시하다"},{"chapter":"20 단원","word":"stand","meaning":"노점,가판대"},{"chapter":"20 단원","word":"retail","meaning":"소매"},{"chapter":"20 단원","word":"discount","meaning":"할인,할인하다"},{"chapter":"20 단원","word":"receipt","meaning":"영수증"},{"chapter":"20 단원","word":"brand-name","meaning":"(유명)상표가 붙은"},{"chapter":"20 단원","word":"auction","meaning":"경매"},{"chapter":"20 단원","word":"reasonable","meaning":"(가격이)합리적인,저렴한,이치에 맞는"},{"chapter":"20 단원","word":"catalog","meaning":"목록,(상품 등의)카탈로그"},{"chapter":"20 단원","word":"quality","meaning":"질,품질"},{"chapter":"21 단원","word":"eat","meaning":"먹다"},{"chapter":"21 단원","word":"drink","meaning":"음료,마실 것,마시다"},{"chapter":"21 단원","word":"take","meaning":"받다"},{"chapter":"21 단원","word":"order","meaning":"주문,주문하다"},{"chapter":"21 단원","word":"cook","meaning":"요리사,요리하다"},{"chapter":"21 단원","word":"chef","meaning":"요리사,주방장"},{"chapter":"21 단원","word":"buffet","meaning":"뷔페 식당,뷔페식 상차림"},{"chapter":"21 단원","word":"waiter","meaning":"웨이터"},{"chapter":"21 단원","word":"dessert","meaning":"디저트,후식"},{"chapter":"21 단원","word":"napkin","meaning":"냅킨"},{"chapter":"21 단원","word":"restaurant","meaning":"음식점"},{"chapter":"21 단원","word":"set","meaning":"놓다,준비하다"},{"chapter":"21 단원","word":"deliver","meaning":"배달하다"},{"chapter":"21 단원","word":"wipe","meaning":"닦다"},{"chapter":"21 단원","word":"straw","meaning":"빨대,지푸라기"},{"chapter":"21 단원","word":"bite","meaning":"한 입,물다"},{"chapter":"21 단원","word":"spill","meaning":"흘리다,엎지르다"},{"chapter":"21 단원","word":"special","meaning":"특별한 것,특별 메뉴,특별한"},{"chapter":"21 단원","word":"rare","meaning":"(고기 등이)덜 익은,드문,희귀한"},{"chapter":"21 단원","word":"calorie","meaning":"칼로리,열량"},{"chapter":"21 단원","word":"serve","meaning":"시중들다,제공하다"},{"chapter":"21 단원","word":"tip","meaning":"팁,(물건,신체의)뾰족한 끝"},{"chapter":"21 단원","word":"beverage","meaning":"음료"},{"chapter":"21 단원","word":"refill","meaning":"새 보충물,다시 채우다,보충하다"},{"chapter":"21 단원","word":"wrap","meaning":"싸다,포장하다,포장지"},{"chapter":"21 단원","word":"bill","meaning":"계산서,청구서"},{"chapter":"21 단원","word":"total","meaning":"합계,총액,전체의,총"},{"chapter":"21 단원","word":"ingredient","meaning":"재료"},{"chapter":"21 단원","word":"recommend","meaning":"추천하다"},{"chapter":"21 단원","word":"appetite","meaning":"식욕"},{"chapter":"22 단원","word":"sand","meaning":"모래"},{"chapter":"22 단원","word":"wave","meaning":"파도"},{"chapter":"22 단원","word":"shell","meaning":"조개"},{"chapter":"22 단원","word":"suntan","meaning":"선탠,볕에 그을음"},{"chapter":"22 단원","word":"stone","meaning":"돌"},{"chapter":"22 단원","word":"raft","meaning":"고무보트,뗏목"},{"chapter":"22 단원","word":"yacht","meaning":"요트"},{"chapter":"22 단원","word":"sunglasses","meaning":"선글라스"},{"chapter":"22 단원","word":"parasol","meaning":"파라솔,양산"},{"chapter":"22 단원","word":"mat","meaning":"돗자리,매트"},{"chapter":"22 단원","word":"vacation","meaning":"방학"},{"chapter":"22 단원","word":"rock","meaning":"바위,암석"},{"chapter":"22 단원","word":"whistle","meaning":"호각,호각을 불다"},{"chapter":"22 단원","word":"lifeboat","meaning":"구명보트"},{"chapter":"22 단원","word":"scuba","meaning":"스쿠버,잠수용 호흡장치"},{"chapter":"22 단원","word":"swimsuit","meaning":"수영복"},{"chapter":"22 단원","word":"sunblock","meaning":"자외선 차단제"},{"chapter":"22 단원","word":"cooler","meaning":"냉장 박스"},{"chapter":"22 단원","word":"blanket","meaning":"담요"},{"chapter":"22 단원","word":"shade","meaning":"그늘"},{"chapter":"22 단원","word":"shore","meaning":"물가,기슭"},{"chapter":"22 단원","word":"pail","meaning":"양동이"},{"chapter":"22 단원","word":"sunbath","meaning":"일광욕"},{"chapter":"22 단원","word":"lifeguard","meaning":"인명 구조원"},{"chapter":"22 단원","word":"float","meaning":"물 위에 뜨다,(배 등을)띄우다"},{"chapter":"22 단원","word":"flipper","meaning":"물갈퀴,오리발"},{"chapter":"22 단원","word":"binoculars","meaning":"쌍안경"},{"chapter":"22 단원","word":"snorkel","meaning":"스노클을 쓰고 잠수하다,헤엄치다"},{"chapter":"22 단원","word":"pebble","meaning":"조약돌,자갈"},{"chapter":"22 단원","word":"expose","meaning":"노출하다"},{"chapter":"23 단원","word":"festival","meaning":"축제"},{"chapter":"23 단원","word":"Valentine","meaning":"밸런타인"},{"chapter":"23 단원","word":"color","meaning":"색,색칠하다"},{"chapter":"23 단원","word":"birthday","meaning":"생일"},{"chapter":"23 단원","word":"card","meaning":"카드"},{"chapter":"23 단원","word":"candle","meaning":"초"},{"chapter":"23 단원","word":"blow","meaning":"끄다"},{"chapter":"23 단원","word":"Christmas","meaning":"크리스마스"},{"chapter":"23 단원","word":"candy","meaning":"사랑"},{"chapter":"23 단원","word":"year","meaning":"해,년"},{"chapter":"23 단원","word":"wish","meaning":"소원,기원하다"},{"chapter":"23 단원","word":"mask","meaning":"가면"},{"chapter":"23 단원","word":"honeymoon","meaning":"신혼여행"},{"chapter":"23 단원","word":"Easter","meaning":"부활절"},{"chapter":"23 단원","word":"hide","meaning":"숨기다"},{"chapter":"23 단원","word":"invitation","meaning":"초대,초대장"},{"chapter":"23 단원","word":"Eve","meaning":"전날 밤,이브"},{"chapter":"23 단원","word":"decorate","meaning":"장식하다"},{"chapter":"23 단원","word":"witch","meaning":"마녀"},{"chapter":"23 단원","word":"trick","meaning":"속이다"},{"chapter":"23 단원","word":"costume","meaning":"복장,의상"},{"chapter":"23 단원","word":"turkey","meaning":"칠면조,칠면조 고기"},{"chapter":"23 단원","word":"congratulate","meaning":"축하하다"},{"chapter":"23 단원","word":"Thanksgiving","meaning":"추수 감사절"},{"chapter":"23 단원","word":"Halloween","meaning":"핼러윈"},{"chapter":"23 단원","word":"reindeer","meaning":"순록"},{"chapter":"23 단원","word":"lantern","meaning":"랜턴"},{"chapter":"23 단원","word":"skeleton","meaning":"해골"},{"chapter":"23 단원","word":"stuff","meaning":"(속을)채우다"},{"chapter":"23 단원","word":"crowded","meaning":"붐비는,혼잡한"},{"chapter":"24 단원","word":"jump","meaning":"점프하다"},{"chapter":"24 단원","word":"seesaw","meaning":"시소,시소를 타다"},{"chapter":"24 단원","word":"pond","meaning":"연못"},{"chapter":"24 단원","word":"ride","meaning":"탈것,타다"},{"chapter":"24 단원","word":"bench","meaning":"긴 의자,벤치"},{"chapter":"24 단원","word":"event","meaning":"사건,행사"},{"chapter":"24 단원","word":"picnic","meaning":"소풍"},{"chapter":"24 단원","word":"zoo","meaning":"동물원"},{"chapter":"24 단원","word":"run","meaning":"달리다"},{"chapter":"24 단원","word":"concert","meaning":"콘서트,공연"},{"chapter":"24 단원","word":"visit","meaning":"방문하다"},{"chapter":"24 단원","word":"rope","meaning":"줄"},{"chapter":"24 단원","word":"backpack","meaning":"배낭,배낭을 지고 걷다"},{"chapter":"24 단원","word":"slide","meaning":"미끄럼틀,미끄러지다"},{"chapter":"24 단원","word":"fountain","meaning":"분수"},{"chapter":"24 단원","word":"playground","meaning":"놀이터,운동장"},{"chapter":"24 단원","word":"swing","meaning":"그네,그네를 타다"},{"chapter":"24 단원","word":"sleeping bag","meaning":"침낭"},{"chapter":"24 단원","word":"campfire","meaning":"모닥불"},{"chapter":"24 단원","word":"fishing rod","meaning":"낚싯대"},{"chapter":"24 단원","word":"walk","meaning":"걷다,산책하다"},{"chapter":"24 단원","word":"amusement","meaning":"놀이,즐거움,재미"},{"chapter":"24 단원","word":"merry-go-round","meaning":"회전목마"},{"chapter":"24 단원","word":"flea market","meaning":"벼룩시장"},{"chapter":"24 단원","word":"botanical garden","meaning":"식물원"},{"chapter":"24 단원","word":"aquarium","meaning":"수족관"},{"chapter":"24 단원","word":"thermos","meaning":"보온병"},{"chapter":"24 단원","word":"stake","meaning":"말뚝"},{"chapter":"24 단원","word":"peak","meaning":"꼭대기"},{"chapter":"24 단원","word":"rapids","meaning":"급류,여울"},{"chapter":"25 단원","word":"sky","meaning":"하늘"},{"chapter":"25 단원","word":"flood","meaning":"홍수"},{"chapter":"25 단원","word":"hurricane","meaning":"폭풍,허리케인"},{"chapter":"25 단원","word":"thunder","meaning":"천둥,천둥같이 큰 소리"},{"chapter":"25 단원","word":"lightning","meaning":"번개,번개 같은"},{"chapter":"25 단원","word":"creature","meaning":"(신의)창조물,피조물"},{"chapter":"25 단원","word":"climb","meaning":"오르다,등반하다"},{"chapter":"25 단원","word":"soil","meaning":"흙,땅,토지"},{"chapter":"25 단원","word":"island","meaning":"섬"},{"chapter":"25 단원","word":"breeze","meaning":"산들바람"},{"chapter":"25 단원","word":"cliff","meaning":"벼랑,절벽"},{"chapter":"25 단원","word":"volcano","meaning":"화산"},{"chapter":"25 단원","word":"natural","meaning":"자연의,자연스러운"},{"chapter":"25 단원","word":"forest","meaning":"숲,삼림"},{"chapter":"25 단원","word":"desert","meaning":"사막"},{"chapter":"25 단원","word":"explore","meaning":"탐험하다"},{"chapter":"25 단원","word":"stream","meaning":"시내,개울,흐름,동향"},{"chapter":"25 단원","word":"lake","meaning":"호수"},{"chapter":"25 단원","word":"waterfall","meaning":"폭포"},{"chapter":"25 단원","word":"river","meaning":"강"},{"chapter":"25 단원","word":"ocean","meaning":"바다,대양"},{"chapter":"25 단원","word":"coast","meaning":"해안가"},{"chapter":"25 단원","word":"tide","meaning":"조수,간만"},{"chapter":"25 단원","word":"landslide","meaning":"산사태"},{"chapter":"25 단원","word":"earthquake","meaning":"지진"},{"chapter":"25 단원","word":"element","meaning":"요소,성분,원소"},{"chapter":"25 단원","word":"appear","meaning":"나타나다"},{"chapter":"25 단원","word":"source","meaning":"원천,수원"},{"chapter":"25 단원","word":"disaster","meaning":"재난,재해"},{"chapter":"25 단원","word":"food chain","meaning":"먹이 사슬"},{"chapter":"26 단원","word":"hot","meaning":"더운,뜨거운"},{"chapter":"26 단원","word":"cold","meaning":"차가운,추운"},{"chapter":"26 단원","word":"cool","meaning":"시원한"},{"chapter":"26 단원","word":"clear","meaning":"청명한,깨끗한,명백한"},{"chapter":"26 단원","word":"sunny","meaning":"햇빛이 밝은,화창한"},{"chapter":"26 단원","word":"cloudy","meaning":"구름 낀"},{"chapter":"26 단원","word":"rainy","meaning":"비가 오는"},{"chapter":"26 단원","word":"windy","meaning":"바람 부는"},{"chapter":"26 단원","word":"snowy","meaning":"눈이 내리는"},{"chapter":"26 단원","word":"foggy","meaning":"안개 낀"},{"chapter":"26 단원","word":"freezing","meaning":"몹시 추운,얼어붙을 듯한"},{"chapter":"26 단원","word":"icy","meaning":"얼음의,싸늘한"},{"chapter":"26 단원","word":"dry","meaning":"건조한,말리다,건조하게 하다"},{"chapter":"26 단원","word":"moist","meaning":"축축한,습기 있는"},{"chapter":"26 단원","word":"storm","meaning":"폭풍(우)"},{"chapter":"26 단원","word":"rainfall","meaning":"강우,강우량"},{"chapter":"26 단원","word":"hail","meaning":"우박,싸락눈"},{"chapter":"26 단원","word":"snowstorm","meaning":"눈보라"},{"chapter":"26 단원","word":"blizzard","meaning":"강한 눈보라,블리자드"},{"chapter":"26 단원","word":"drizzle","meaning":"이슬비"},{"chapter":"26 단원","word":"melt","meaning":"녹다,녹이다"},{"chapter":"26 단원","word":"gale","meaning":"강풍"},{"chapter":"26 단원","word":"forecast","meaning":"예측,(일기의)예보,예측하다,(일기,기상을)예보하다"},{"chapter":"26 단원","word":"condition","meaning":"상태,상황"},{"chapter":"26 단원","word":"drought","meaning":"가뭄"},{"chapter":"26 단원","word":"climate","meaning":"기후"},{"chapter":"26 단원","word":"degree","meaning":"(온도 단위인) 도"},{"chapter":"26 단원","word":"temperature","meaning":"온도"},{"chapter":"26 단원","word":"humid","meaning":"습한,눅눅한"},{"chapter":"26 단원","word":"sticky","meaning":"끈적끈적한,무더운"},{"chapter":"27 단원","word":"farm","meaning":"농장"},{"chapter":"27 단원","word":"fence","meaning":"울타리"},{"chapter":"27 단원","word":"field","meaning":"밭"},{"chapter":"27 단원","word":"cowboy","meaning":"카우보이,목동"},{"chapter":"27 단원","word":"rabbit","meaning":"토끼"},{"chapter":"27 단원","word":"sheep","meaning":"양"},{"chapter":"27 단원","word":"horse","meaning":"말"},{"chapter":"27 단원","word":"bull","meaning":"황소"},{"chapter":"27 단원","word":"chicken","meaning":"닭"},{"chapter":"27 단원","word":"goat","meaning":"염소"},{"chapter":"27 단원","word":"pig","meaning":"돼지"},{"chapter":"27 단원","word":"buffalo","meaning":"버팔로,물소,들소"},{"chapter":"27 단원","word":"meadow","meaning":"목초지,초원"},{"chapter":"27 단원","word":"barn","meaning":"헛간"},{"chapter":"27 단원","word":"hay","meaning":"건초"},{"chapter":"27 단원","word":"harvest","meaning":"수확하다"},{"chapter":"27 단원","word":"calf","meaning":"송아지"},{"chapter":"27 단원","word":"cattle","meaning":"소"},{"chapter":"27 단원","word":"lay","meaning":"알을 낳다,~을~에 두다"},{"chapter":"27 단원","word":"cotton","meaning":"면"},{"chapter":"27 단원","word":"shepherd","meaning":"양치기"},{"chapter":"27 단원","word":"farmhouse","meaning":"농가,농가에 딸린 집"},{"chapter":"27 단원","word":"orchard","meaning":"과수원"},{"chapter":"27 단원","word":"shed","meaning":"헛간,광"},{"chapter":"27 단원","word":"ranch","meaning":"농장,목축장"},{"chapter":"27 단원","word":"pasture","meaning":"목장,방목하다"},{"chapter":"27 단원","word":"combine","meaning":"콤바인(베어서 탈곡하는 농기계)"},{"chapter":"27 단원","word":"scarecrow","meaning":"허수아비"},{"chapter":"27 단원","word":"livestock","meaning":"가축류"},{"chapter":"27 단원","word":"vineyard","meaning":"포도밭,포도원"},{"chapter":"28 단원","word":"flower","meaning":"꽃,꽃이 피다"},{"chapter":"28 단원","word":"leaf","meaning":"나뭇잎,잎사귀"},{"chapter":"28 단원","word":"bloom","meaning":"꽃,개화,꽃이 피다,개화하다"},{"chapter":"28 단원","word":"fruit","meaning":"열매,과일,결과,성과"},{"chapter":"28 단원","word":"grass","meaning":"풀,잔디,잔디밭"},{"chapter":"28 단원","word":"weed","meaning":"잡초,~의 잡초를 뽑다"},{"chapter":"28 단원","word":"plant","meaning":"식물,심다,씨를 뿌리다"},{"chapter":"28 단원","word":"seed","meaning":"씨앗,종자"},{"chapter":"28 단원","word":"sprout","meaning":"새싹"},{"chapter":"28 단원","word":"bud","meaning":"(식물의)눈,봉오리"},{"chapter":"28 단원","word":"petal","meaning":"꽃잎"},{"chapter":"28 단원","word":"root","meaning":"뿌리,뿌리 뽑다"},{"chapter":"28 단원","word":"stem","meaning":"(식물의)줄기,대,유래하다,시작되다"},{"chapter":"28 단원","word":"thorn","meaning":"가시"},{"chapter":"28 단원","word":"branch","meaning":"나뭇가지,분점,지점"},{"chapter":"28 단원","word":"bough","meaning":"(나무의)큰 가지"},{"chapter":"28 단원","word":"maple","meaning":"단풍나무"},{"chapter":"28 단원","word":"bamboo","meaning":"대나무"},{"chapter":"28 단원","word":"needle","meaning":"(침엽수의)바늘처럼 뾰족한 잎,바늘"},{"chapter":"28 단원","word":"pine tree","meaning":"소나무"},{"chapter":"28 단원","word":"cherry tree","meaning":"벚나무"},{"chapter":"28 단원","word":"cactus","meaning":"선인장"},{"chapter":"28 단원","word":"trunk","meaning":"나무의 몸통 부분,코끼리의 코"},{"chapter":"28 단원","word":"bark","meaning":"나무껍질,(개가)짖다"},{"chapter":"28 단원","word":"fertilizer","meaning":"비료"},{"chapter":"28 단원","word":"bush","meaning":"관목,작은 나무들이 우거진 관목 숲"},{"chapter":"28 단원","word":"palm","meaning":"야자수,손바닥"},{"chapter":"28 단원","word":"bulb","meaning":"구근,알뿌리,전구"},{"chapter":"28 단원","word":"poisonous","meaning":"독이 있는"},{"chapter":"28 단원","word":"herb","meaning":"약초,허브"},{"chapter":"29 단원","word":"dog","meaning":"개"},{"chapter":"29 단원","word":"rat","meaning":"쥐"},{"chapter":"29 단원","word":"bat","meaning":"박쥐"},{"chapter":"29 단원","word":"snake","meaning":"뱀"},{"chapter":"29 단원","word":"elephant","meaning":"코끼리"},{"chapter":"29 단원","word":"monkey","meaning":"원숭이"},{"chapter":"29 단원","word":"fox","meaning":"여우"},{"chapter":"29 단원","word":"tiger","meaning":"호랑이"},{"chapter":"29 단원","word":"whale","meaning":"고래"},{"chapter":"29 단원","word":"bear","meaning":"곰"},{"chapter":"29 단원","word":"deer","meaning":"사슴"},{"chapter":"29 단원","word":"kangaroo","meaning":"캥거루"},{"chapter":"29 단원","word":"giraffe","meaning":"기린"},{"chapter":"29 단원","word":"zebra","meaning":"얼룩말"},{"chapter":"29 단원","word":"camel","meaning":"낙타,낙타색"},{"chapter":"29 단원","word":"dolphin","meaning":"돌고래"},{"chapter":"29 단원","word":"shark","meaning":"상어"},{"chapter":"29 단원","word":"leopard","meaning":"표범"},{"chapter":"29 단원","word":"tortoise","meaning":"(육지 또는 민물)거북"},{"chapter":"29 단원","word":"frog","meaning":"개구리"},{"chapter":"29 단원","word":"dinosaur","meaning":"공룡"},{"chapter":"29 단원","word":"bird cage","meaning":"새장"},{"chapter":"29 단원","word":"fish tank","meaning":"어항"},{"chapter":"29 단원","word":"octopus","meaning":"문어,낙지"},{"chapter":"29 단원","word":"jellyfish","meaning":"해파리"},{"chapter":"29 단원","word":"sea horse","meaning":"해마"},{"chapter":"29 단원","word":"hippo(hippopotamus)","meaning":"하마"},{"chapter":"29 단원","word":"rhino(rhinoceros)","meaning":"코뿔소"},{"chapter":"29 단원","word":"crocodile","meaning":"악어"},{"chapter":"29 단원","word":"lizard","meaning":"도마뱀"},{"chapter":"30 단원","word":"insect","meaning":"곤충"},{"chapter":"30 단원","word":"ant","meaning":"개미"},{"chapter":"30 단원","word":"bee","meaning":"벌"},{"chapter":"30 단원","word":"fly","meaning":"파리,날다"},{"chapter":"30 단원","word":"wing","meaning":"날개"},{"chapter":"30 단원","word":"hen","meaning":"암탉"},{"chapter":"30 단원","word":"duck","meaning":"오리"},{"chapter":"30 단원","word":"spider","meaning":"거미"},{"chapter":"30 단원","word":"butterfly","meaning":"나비"},{"chapter":"30 단원","word":"beetle","meaning":"딱정벌레"},{"chapter":"30 단원","word":"ladybug","meaning":"무당벌레"},{"chapter":"30 단원","word":"flea","meaning":"벼룩"},{"chapter":"30 단원","word":"mosquito","meaning":"모기"},{"chapter":"30 단원","word":"swan","meaning":"백조"},{"chapter":"30 단원","word":"penguin","meaning":"펭귄"},{"chapter":"30 단원","word":"eagle","meaning":"독수리"},{"chapter":"30 단원","word":"beak","meaning":"부리"},{"chapter":"30 단원","word":"crow","meaning":"까마귀"},{"chapter":"30 단원","word":"pigeon","meaning":"비둘기"},{"chapter":"30 단원","word":"parrot","meaning":"앵무새"},{"chapter":"30 단원","word":"goose","meaning":"거위"},{"chapter":"30 단원","word":"cuckoo","meaning":"뻐꾸기"},{"chapter":"30 단원","word":"owl","meaning":"올빼미"},{"chapter":"30 단원","word":"peacock","meaning":"공작새"},{"chapter":"30 단원","word":"ostrich","meaning":"타조"},{"chapter":"30 단원","word":"swallow","meaning":"제비,삼키다"},{"chapter":"30 단원","word":"moth","meaning":"나방,좀벌레"},{"chapter":"30 단원","word":"cricket","meaning":"귀뚜라미"},{"chapter":"30 단원","word":"caterpillar","meaning":"애벌레,유충"},{"chapter":"30 단원","word":"hummingbird","meaning":"벌새"},{"chapter":"31 단원","word":"air","meaning":"공기,대기"},{"chapter":"31 단원","word":"pollution","meaning":"오염"},{"chapter":"31 단원","word":"protect","meaning":"보호하다"},{"chapter":"31 단원","word":"separate","meaning":"분리하다"},{"chapter":"31 단원","word":"waste","meaning":"쓰레기,낭비,낭비하다"},{"chapter":"31 단원","word":"environment","meaning":"환경"},{"chapter":"31 단원","word":"effect","meaning":"영향,효과"},{"chapter":"31 단원","word":"resource","meaning":"자원"},{"chapter":"31 단원","word":"recycle","meaning":"재활용하다"},{"chapter":"31 단원","word":"destroy","meaning":"파괴하다,부수다"},{"chapter":"31 단원","word":"damage","meaning":"손상,피해"},{"chapter":"31 단원","word":"garbage","meaning":"쓰레기"},{"chapter":"31 단원","word":"share","meaning":"공유하다"},{"chapter":"31 단원","word":"cause","meaning":"야기하다"},{"chapter":"31 단원","word":"ruin","meaning":"파괴,유적,폐허,파멸시키다"},{"chapter":"31 단원","word":"raw","meaning":"날것의,가공하지 않은"},{"chapter":"31 단원","word":"electricity","meaning":"전기"},{"chapter":"31 단원","word":"pure","meaning":"순수한"},{"chapter":"31 단원","word":"smog","meaning":"스모그,연무"},{"chapter":"31 단원","word":"fuel","meaning":"연료"},{"chapter":"31 단원","word":"fossil","meaning":"화석"},{"chapter":"31 단원","word":"acid","meaning":"산,산성의"},{"chapter":"31 단원","word":"toxic","meaning":"유독한"},{"chapter":"31 단원","word":"exhaust","meaning":"배기가스,다 써버리다"},{"chapter":"31 단원","word":"shortage","meaning":"부족,결핍"},{"chapter":"31 단원","word":"reduce","meaning":"줄이다"},{"chapter":"31 단원","word":"endangered","meaning":"멸종위기의,위험에 처한"},{"chapter":"31 단원","word":"leak","meaning":"누출,새다"},{"chapter":"31 단원","word":"overuse","meaning":"남용,남용하다"},{"chapter":"31 단원","word":"greenhouse","meaning":"온실"},{"chapter":"32 단원","word":"electric","meaning":"전기의"},{"chapter":"32 단원","word":"invent","meaning":"발명하다"},{"chapter":"32 단원","word":"machine","meaning":"기계"},{"chapter":"32 단원","word":"data","meaning":"자료,정보"},{"chapter":"32 단원","word":"important","meaning":"중요한"},{"chapter":"32 단원","word":"cell","meaning":"세포"},{"chapter":"32 단원","word":"magnet","meaning":"자석"},{"chapter":"32 단원","word":"e-mail","meaning":"이메일"},{"chapter":"32 단원","word":"prove","meaning":"증명하다"},{"chapter":"32 단원","word":"inform","meaning":"알리다,통지하다"},{"chapter":"32 단원","word":"experiment","meaning":"실험,실험하다"},{"chapter":"32 단원","word":"method","meaning":"방법"},{"chapter":"32 단원","word":"chemical","meaning":"화학의,화학약품"},{"chapter":"32 단원","word":"measure","meaning":"측정하다"},{"chapter":"32 단원","word":"technology","meaning":"기술"},{"chapter":"32 단원","word":"inspect","meaning":"조사하다"},{"chapter":"32 단원","word":"imagine","meaning":"상상하다"},{"chapter":"32 단원","word":"visible","meaning":"눈에 보이는"},{"chapter":"32 단원","word":"vacuum","meaning":"진공,공백,(진공청소기로)청소하다"},{"chapter":"32 단원","word":"react","meaning":"반응하다"},{"chapter":"32 단원","word":"mobile","meaning":"이동성의"},{"chapter":"32 단원","word":"charge","meaning":"충전하다"},{"chapter":"32 단원","word":"multiply","meaning":"곱하다,증가시키다"},{"chapter":"32 단원","word":"gravity","meaning":"중력"},{"chapter":"32 단원","word":"browse","meaning":"검색하다"},{"chapter":"32 단원","word":"device","meaning":"장치"},{"chapter":"32 단원","word":"delete","meaning":"삭제하다"},{"chapter":"32 단원","word":"wireless","meaning":"무선의"},{"chapter":"32 단원","word":"transmit","meaning":"보내다,전송하다,전염시키다"},{"chapter":"32 단원","word":"formula","meaning":"공식"},{"chapter":"33 단원","word":"earth","meaning":"지구"},{"chapter":"33 단원","word":"sun","meaning":"태양"},{"chapter":"33 단원","word":"moon","meaning":"달"},{"chapter":"33 단원","word":"star","meaning":"별,항성"},{"chapter":"33 단원","word":"planet","meaning":"행성"},{"chapter":"33 단원","word":"universe","meaning":"우주"},{"chapter":"33 단원","word":"solar","meaning":"태양의"},{"chapter":"33 단원","word":"lunar","meaning":"달의"},{"chapter":"33 단원","word":"crew","meaning":"(비행기나 배의)승무원"},{"chapter":"33 단원","word":"rocket","meaning":"로켓,로켓으로 쏘아 올리다"},{"chapter":"33 단원","word":"surface","meaning":"표면"},{"chapter":"33 단원","word":"Mercury","meaning":"수성,수은"},{"chapter":"33 단원","word":"Venus","meaning":"금성"},{"chapter":"33 단원","word":"Mars","meaning":"화성"},{"chapter":"33 단원","word":"Jupiter","meaning":"목성"},{"chapter":"33 단원","word":"Saturn","meaning":"토성"},{"chapter":"33 단원","word":"ring","meaning":"고리,반지"},{"chapter":"33 단원","word":"comet","meaning":"혜성"},{"chapter":"33 단원","word":"telescope","meaning":"망원경"},{"chapter":"33 단원","word":"milky way","meaning":"은하수"},{"chapter":"33 단원","word":"space shuttle","meaning":"우주 왕복선"},{"chapter":"33 단원","word":"space station","meaning":"우주 정거장"},{"chapter":"33 단원","word":"eclipse","meaning":"식(개기일식의 식)"},{"chapter":"33 단원","word":"satellite","meaning":"위성"},{"chapter":"33 단원","word":"orbit","meaning":"궤도,궤도를 그리며 돌다"},{"chapter":"33 단원","word":"galaxy","meaning":"은하"},{"chapter":"33 단원","word":"astronomy","meaning":"천문학"},{"chapter":"33 단원","word":"astronomer","meaning":"천문학자"},{"chapter":"33 단원","word":"Big Bang","meaning":"빅뱅(우주 생성의 시발이 된 것으로 여겨지는 대폭발)"},{"chapter":"33 단원","word":"light year","meaning":"광년(빛이 1년에 나아가는 거리로 약 9조 4670억 킬로미터)"},{"chapter":"34 단원","word":"power","meaning":"힘,권력,에너지"},{"chapter":"34 단원","word":"energy","meaning":"에너지"},{"chapter":"34 단원","word":"produce","meaning":"생산하다,만들어내다"},{"chapter":"34 단원","word":"oil","meaning":"기름"},{"chapter":"34 단원","word":"wind","meaning":"바람"},{"chapter":"34 단원","word":"coal","meaning":"석탄"},{"chapter":"34 단원","word":"mine","meaning":"광산,지뢰,채굴하다"},{"chapter":"34 단원","word":"factory","meaning":"공장"},{"chapter":"34 단원","word":"dam","meaning":"댐"},{"chapter":"34 단원","word":"heat","meaning":"열,가열하다"},{"chapter":"34 단원","word":"battery","meaning":"배터리"},{"chapter":"34 단원","word":"generate","meaning":"생성하다,발생시키다"},{"chapter":"34 단원","word":"nuclear","meaning":"원자핵의"},{"chapter":"34 단원","word":"windmill","meaning":"풍차"},{"chapter":"34 단원","word":"failure","meaning":"정지,고장,실패"},{"chapter":"34 단원","word":"tidal","meaning":"조수의(조수간만의 차 할 때 조수)"},{"chapter":"34 단원","word":"careless","meaning":"부주의한"},{"chapter":"34 단원","word":"transform","meaning":"바꾸다,변형시키다"},{"chapter":"34 단원","word":"natural gas","meaning":"천연 가스"},{"chapter":"34 단원","word":"abundant","meaning":"풍부한,풍족한"},{"chapter":"34 단원","word":"utility pole","meaning":"전신주"},{"chapter":"34 단원","word":"solar collector","meaning":"태양열 집열기"},{"chapter":"34 단원","word":"transmission tower","meaning":"송전탑"},{"chapter":"34 단원","word":"radioactive","meaning":"방사능을 가진"},{"chapter":"34 단원","word":"power line","meaning":"송전선"},{"chapter":"34 단원","word":"conserve","meaning":"보전하다,아끼다,절약하다"},{"chapter":"34 단원","word":"efficiency","meaning":"효율"},{"chapter":"34 단원","word":"crisis","meaning":"위기"},{"chapter":"34 단원","word":"authorized","meaning":"권한이 부여된"},{"chapter":"34 단원","word":"turbine","meaning":"터빈,원동기"},{"chapter":"35 단원","word":"learn","meaning":"배우다"},{"chapter":"35 단원","word":"lesson","meaning":"수업,교훈"},{"chapter":"35 단원","word":"study","meaning":"연구,공부하다"},{"chapter":"35 단원","word":"exam","meaning":"시험"},{"chapter":"35 단원","word":"grade","meaning":"학년,등급,점수,점수를 매기다"},{"chapter":"35 단원","word":"college","meaning":"단과대학"},{"chapter":"35 단원","word":"university","meaning":"종합대학"},{"chapter":"35 단원","word":"elementary","meaning":"기초의,기본이 되는"},{"chapter":"35 단원","word":"discuss","meaning":"토론하다"},{"chapter":"35 단원","word":"explain","meaning":"설명하다"},{"chapter":"35 단원","word":"memorize","meaning":"암기하다"},{"chapter":"35 단원","word":"entrance","meaning":"입장,입학"},{"chapter":"35 단원","word":"educate","meaning":"교육하다,육성하다"},{"chapter":"35 단원","word":"kindergarten","meaning":"유치원"},{"chapter":"35 단원","word":"graduate","meaning":"졸업하다"},{"chapter":"35 단원","word":"knowledge","meaning":"지식"},{"chapter":"35 단원","word":"schoolmate","meaning":"학교 친구,동창생"},{"chapter":"35 단원","word":"homeroom teacher","meaning":"담임 선생님"},{"chapter":"35 단원","word":"submit","meaning":"제출하다"},{"chapter":"35 단원","word":"academic","meaning":"학술적인,학문적인"},{"chapter":"35 단원","word":"instruct","meaning":"교수하다,가르치다"},{"chapter":"35 단원","word":"absent","meaning":"결석한"},{"chapter":"35 단원","word":"attend","meaning":"출석하다,참석하다"},{"chapter":"35 단원","word":"semester","meaning":"학기"},{"chapter":"35 단원","word":"alternative","meaning":"대안,대안의"},{"chapter":"35 단원","word":"lecture","meaning":"강의"},{"chapter":"35 단원","word":"pupil","meaning":"학생"},{"chapter":"35 단원","word":"intelligence","meaning":"지성,지능"},{"chapter":"35 단원","word":"scholarship","meaning":"장학금"},{"chapter":"35 단원","word":"encourage","meaning":"용기를 북돋우다,격려하다"},{"chapter":"36 단원","word":"teacher","meaning":"선생님"},{"chapter":"36 단원","word":"classroom","meaning":"교실"},{"chapter":"36 단원","word":"flag","meaning":"국기,깃발"},{"chapter":"36 단원","word":"chalk","meaning":"분필"},{"chapter":"36 단원","word":"map","meaning":"지도"},{"chapter":"36 단원","word":"textbook","meaning":"교과서"},{"chapter":"36 단원","word":"notebook","meaning":"공책"},{"chapter":"36 단원","word":"partner","meaning":"짝,동료,협력자"},{"chapter":"36 단원","word":"homework","meaning":"숙제"},{"chapter":"36 단원","word":"math","meaning":"수학"},{"chapter":"36 단원","word":"classmate","meaning":"급우,학급친구"},{"chapter":"36 단원","word":"senior","meaning":"선배,손위의,최고 학년의"},{"chapter":"36 단원","word":"locker","meaning":"(자물쇠가 달린)사물함,로커"},{"chapter":"36 단원","word":"chalk board","meaning":"칠판"},{"chapter":"36 단원","word":"marker","meaning":"마커펜"},{"chapter":"36 단원","word":"club","meaning":"동아리"},{"chapter":"36 단원","word":"hall","meaning":"강당,부속회관"},{"chapter":"36 단원","word":"subject","meaning":"과목,주제"},{"chapter":"36 단원","word":"project","meaning":"계획,기획,프로젝트"},{"chapter":"36 단원","word":"library","meaning":"도서관"},{"chapter":"36 단원","word":"P.E.(Physical Education)","meaning":"체육"},{"chapter":"36 단원","word":"hallway","meaning":"복도"},{"chapter":"36 단원","word":"principal","meaning":"교장,교장 선생님"},{"chapter":"36 단원","word":"counsel","meaning":"상담,상담하다,권고하다"},{"chapter":"36 단원","word":"admit","meaning":"받아들이다,인정하다"},{"chapter":"36 단원","word":"auditorium","meaning":"강당"},{"chapter":"36 단원","word":"cafeteria","meaning":"식당,간이식당"},{"chapter":"36 단원","word":"assignment","meaning":"과제,숙제"},{"chapter":"36 단원","word":"laboratory","meaning":"실습실,연습실"},{"chapter":"36 단원","word":"bulletin board","meaning":"게시판"},{"chapter":"37 단원","word":"rich","meaning":"부유한"},{"chapter":"37 단원","word":"save","meaning":"저축하다,저장하다,구하다"},{"chapter":"37 단원","word":"spend","meaning":"(시간,돈을)쓰다"},{"chapter":"37 단원","word":"value","meaning":"가치,값,소중히 여기다"},{"chapter":"37 단원","word":"local","meaning":"지역의"},{"chapter":"37 단원","word":"crowd","meaning":"군중"},{"chapter":"37 단원","word":"debt","meaning":"빚,부채"},{"chapter":"37 단원","word":"salary","meaning":"급여"},{"chapter":"37 단원","word":"invest","meaning":"투자하다"},{"chapter":"37 단원","word":"status","meaning":"지위,상태"},{"chapter":"37 단원","word":"culture","meaning":"문화"},{"chapter":"37 단원","word":"citizen","meaning":"시민,국민"},{"chapter":"37 단원","word":"public","meaning":"대중의,공공의,공개된"},{"chapter":"37 단원","word":"supply","meaning":"공급,공급하다"},{"chapter":"37 단원","word":"demand","meaning":"수요,요구하다"},{"chapter":"37 단원","word":"import","meaning":"수입,수입하다"},{"chapter":"37 단원","word":"export","meaning":"수출,수출하다"},{"chapter":"37 단원","word":"account","meaning":"계좌"},{"chapter":"37 단원","word":"employ","meaning":"고용하다"},{"chapter":"37 단원","word":"individual","meaning":"개인,개인의,개인적인"},{"chapter":"37 단원","word":"relationship","meaning":"관계,사이"},{"chapter":"37 단원","word":"tradition","meaning":"전통"},{"chapter":"37 단원","word":"consumer","meaning":"소비자"},{"chapter":"37 단원","word":"responsibility","meaning":"책임"},{"chapter":"37 단원","word":"influence","meaning":"영향,영향을 미치다"},{"chapter":"37 단원","word":"obstacle","meaning":"장애,장애물"},{"chapter":"37 단원","word":"property","meaning":"재산,소유물"},{"chapter":"37 단원","word":"moral","meaning":"도덕,윤리,도덕적인"},{"chapter":"37 단원","word":"donate","meaning":"기부하다"},{"chapter":"37 단원","word":"predict","meaning":"예측하다,예언하다"},{"chapter":"38 단원","word":"state","meaning":"국가,상태"},{"chapter":"38 단원","word":"vote","meaning":"투표,투표하다"},{"chapter":"38 단원","word":"party","meaning":"정당"},{"chapter":"38 단원","word":"gap","meaning":"차이,격차"},{"chapter":"38 단원","word":"court","meaning":"법정,안뜰"},{"chapter":"38 단원","word":"justice","meaning":"정의"},{"chapter":"38 단원","word":"crime","meaning":"범죄"},{"chapter":"38 단원","word":"murder","meaning":"살인"},{"chapter":"38 단원","word":"victim","meaning":"희생자"},{"chapter":"38 단원","word":"argue","meaning":"논하다,주장하다"},{"chapter":"38 단원","word":"decide","meaning":"결정하다"},{"chapter":"38 단원","word":"policy","meaning":"정책"},{"chapter":"38 단원","word":"illegal","meaning":"불법적인"},{"chapter":"38 단원","word":"guilty","meaning":"유죄의,죄책감의"},{"chapter":"38 단원","word":"innocent","meaning":"무죄의,결백한"},{"chapter":"38 단원","word":"majority","meaning":"대다수,과반수"},{"chapter":"38 단원","word":"minority","meaning":"소수,소수의"},{"chapter":"38 단원","word":"suspect","meaning":"용의자,의심하다"},{"chapter":"38 단원","word":"witness","meaning":"목격자,증인,목격하다"},{"chapter":"38 단원","word":"arrest","meaning":"체포,체포하다"},{"chapter":"38 단원","word":"candidate","meaning":"후보자"},{"chapter":"38 단원","word":"government","meaning":"정부,통치"},{"chapter":"38 단원","word":"elect","meaning":"선출하다"},{"chapter":"38 단원","word":"trial","meaning":"재판,시행"},{"chapter":"38 단원","word":"sentence","meaning":"형벌,문장,선고하다"},{"chapter":"38 단원","word":"protest","meaning":"항의,항의하다"},{"chapter":"38 단원","word":"compensate","meaning":"보상하다,변상하다"},{"chapter":"38 단원","word":"diplomat","meaning":"외교관"},{"chapter":"38 단원","word":"represent","meaning":"대표하다,나타내다"},{"chapter":"38 단원","word":"democracy","meaning":"민주주의"},{"chapter":"39 단원","word":"peace","meaning":"평화"},{"chapter":"39 단원","word":"war","meaning":"전쟁"},{"chapter":"39 단원","word":"century","meaning":"세기,100년"},{"chapter":"39 단원","word":"age","meaning":"나이,시대,시기"},{"chapter":"39 단원","word":"battle","meaning":"싸움,전투"},{"chapter":"39 단원","word":"pray","meaning":"기도하다,기원하다"},{"chapter":"39 단원","word":"heaven","meaning":"천국,하늘"},{"chapter":"39 단원","word":"soul","meaning":"정신,영혼"},{"chapter":"39 단원","word":"belief","meaning":"믿음,신념"},{"chapter":"39 단원","word":"church","meaning":"교회,성당"},{"chapter":"39 단원","word":"temple","meaning":"절,사원"},{"chapter":"39 단원","word":"attack","meaning":"공격,공격하다"},{"chapter":"39 단원","word":"weapon","meaning":"무기"},{"chapter":"39 단원","word":"empire","meaning":"제국"},{"chapter":"39 단원","word":"rule","meaning":"지배,통치,규칙,지배하다,통치하다"},{"chapter":"39 단원","word":"religious","meaning":"종교의"},{"chapter":"39 단원","word":"charity","meaning":"자선,자애"},{"chapter":"39 단원","word":"faithful","meaning":"신실한,성실한"},{"chapter":"39 단원","word":"independence","meaning":"독립"},{"chapter":"39 단원","word":"revolution","meaning":"혁명"},{"chapter":"39 단원","word":"Buddhism","meaning":"불교"},{"chapter":"39 단원","word":"Christianity","meaning":"기독교"},{"chapter":"39 단원","word":"Hinduism","meaning":"힌두교"},{"chapter":"39 단원","word":"Islam","meaning":"이슬람교"},{"chapter":"39 단원","word":"Judaism","meaning":"유대교"},{"chapter":"39 단원","word":"ancient","meaning":"고대의,구식의"},{"chapter":"39 단원","word":"colony","meaning":"식민지"},{"chapter":"39 단원","word":"civilization","meaning":"문명"},{"chapter":"39 단원","word":"spiritual","meaning":"정신적인,영적인"},{"chapter":"39 단원","word":"ceremony","meaning":"의식,예식"},{"chapter":"40 단원","word":"different","meaning":"다른"},{"chapter":"40 단원","word":"global","meaning":"세계적인"},{"chapter":"40 단원","word":"future","meaning":"미래"},{"chapter":"40 단원","word":"race","meaning":"인종,민족,경주"},{"chapter":"40 단원","word":"national","meaning":"국가의"},{"chapter":"40 단원","word":"control","meaning":"통제,통제하다"},{"chapter":"40 단원","word":"fund","meaning":"기금"},{"chapter":"40 단원","word":"die","meaning":"죽다"},{"chapter":"40 단원","word":"foreign","meaning":"외국의"},{"chapter":"40 단원","word":"population","meaning":"인구"},{"chapter":"40 단원","word":"increase","meaning":"증가,증가하다"},{"chapter":"40 단원","word":"decrease","meaning":"감소,감소하다"},{"chapter":"40 단원","word":"urban","meaning":"도시의"},{"chapter":"40 단원","word":"rural","meaning":"시골의"},{"chapter":"40 단원","word":"region","meaning":"지역,지방"},{"chapter":"40 단원","word":"border","meaning":"국경,경계"},{"chapter":"40 단원","word":"shocking","meaning":"충격적인,놀랄만한"},{"chapter":"40 단원","word":"aid","meaning":"원조,지원,구조"},{"chapter":"40 단원","word":"suffer","meaning":"(고통 등을)겪다,당하다"},{"chapter":"40 단원","word":"hunger","meaning":"배고픔,기아"},{"chapter":"40 단원","word":"orphan","meaning":"고아"},{"chapter":"40 단원","word":"support","meaning":"원조,지원,원조하다,지지하다"},{"chapter":"40 단원","word":"rescue","meaning":"구하다"},{"chapter":"40 단원","word":"immigrate","meaning":"(타국으로부터)이민을 오다"},{"chapter":"40 단원","word":"native","meaning":"~출신자,토착민,토착의,타고난"},{"chapter":"40 단원","word":"ethnic","meaning":"민족의,인종의"},{"chapter":"40 단원","word":"organization","meaning":"기구"},{"chapter":"40 단원","word":"statistic","meaning":"통계치"},{"chapter":"40 단원","word":"agreement","meaning":"협정,계약,동의,합의"},{"chapter":"40 단원","word":"mutual","meaning":"서로의,상호의"}]; 
+    const EMBEDDED_BOOK_NAME = "워드마스터 중등 실력편 _ Eden_V";
+    const IS_STUDENT_VERSION = true; 
+
+    // 🔥 원장님 구글 폼 ID (절대 수정 금지)
+    const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSek78-2N5EvQvUfOsGvE74PGdGINw_UmkqlqBfYH-AM1s1jCg/formResponse";
+    const ENTRY_IDS = {
+        seat: "entry.1387345994",      
+        name: "entry.727055287",       
+        chapter: "entry.674261532",    
+        time1: "entry.309166075",      
+        time2: "entry.1217935655",     
+        time3: "entry.1149130991",     
+        time4: "entry.1579947385",     
+        wrongWords: "entry.1787176959"  
+    };
+
+    let submitted = false;
+    document.getElementById('hidden_iframe').onload = function() {
+        if (submitted) { alert('학습 결과가 원장님께 전송되었습니다.'); submitted = false; }
+    };
+
+    let originalWordData = EMBEDDED_DATA.length > 0 ? EMBEDDED_DATA : [{chapter:"기본단원", word:"upload_required", meaning:"자료를 업로드해주세요"}];
+    let textbookName = EMBEDDED_BOOK_NAME;
+
+    /* --- 상태 변수 --- */
+    let activeWordData = [], pendingQueue = [], boxes = { left: [], mid: [], right: [] };
+    let mode = 0, isEnToKo = true, currentWord = null, isFlipped = false, currentCycle = 1;
+    let currentSessionId = null, globalStopwatch, timer3Sec;
+    let sessionData = { time1: 0, time2: 0, time3: 0, time4: 0, p3Stats: { right: 0, mid: 0, left: 0 }, wrongWords: [] };
+    let isAnimating = false; 
+
+    /* --- 초기화 블록 --- */
+    window.onload = function() {
+        if (IS_STUDENT_VERSION) {
+            document.getElementById('btnUpload').style.display = 'none';
+        }
+        
+        // 좌석 및 이름 자동 불러오기
+        if (localStorage.getItem('edenSeat')) {
+            document.getElementById('seatInput').value = localStorage.getItem('edenSeat');
+        }
+        if (localStorage.getItem('edenName')) {
+            document.getElementById('nameInput').value = localStorage.getItem('edenName');
+        }
+
+        showStartModal();
+        
+        // 모바일 오디오 권한 잠금 해제 이벤트
+        document.body.addEventListener('touchstart', unlockAudio, {once:true});
+        document.body.addEventListener('click', unlockAudio, {once:true});
+    };
+
+    /* --- 마스터 배포 파일 생성 --- */
+    function generateStudentFile() {
+        const bookName = document.getElementById('adminBookName').value.trim();
+        if(!bookName) { alert("교재 제목을 먼저 입력해주세요."); return; }
+        
+        let currentHtml = document.documentElement.outerHTML;
+        const dataJson = JSON.stringify(originalWordData);
+        
+        currentHtml = currentHtml.replace(/const EMBEDDED_DATA = \[\];/, `const EMBEDDED_DATA = ${dataJson};`);
+        currentHtml = currentHtml.replace(/const EMBEDDED_BOOK_NAME = "";/, `const EMBEDDED_BOOK_NAME = "${bookName}";`);
+        currentHtml = currentHtml.replace(/const IS_STUDENT_VERSION = false;/, `const IS_STUDENT_VERSION = true;`);
+
+        const blob = new Blob([currentHtml], { type: 'text/html' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `이든학습_${bookName}.html`;
+        link.click();
+        alert("학생용 배포 파일이 생성되었습니다! 이 파일을 학생들에게 카톡이나 문자로 전달하세요.");
+    }
+
+    /* --- 모바일 음성 먹통 방지 (Audio Unlock) 및 TTS --- */
+    let isAudioUnlocked = false; 
+
+    function unlockAudio() {
+        if (isAudioUnlocked || !window.speechSynthesis) return;
+        const u = new SpeechSynthesisUtterance(' '); // 빈 음성
+        u.volume = 0; 
+        u.rate = 10; 
+        window.speechSynthesis.speak(u);
+        isAudioUnlocked = true;
+    }
+
+    function speak(text) { 
+        try {
+            if(!window.speechSynthesis) return;
+            window.speechSynthesis.cancel(); 
+            const u = new SpeechSynthesisUtterance(text); 
+            u.lang = 'en-US'; 
+            u.rate = 0.9; 
+            window.speechSynthesis.speak(u); 
+        } catch(e) { console.warn("TTS Error:", e); }
+    }
+
+    /* --- 구글폼 전송 로직 --- */
+    function sendDataToGoogleForm() {
+        unlockAudio(); 
+        const seat = document.getElementById('seatInput').value.trim();
+        const name = document.getElementById('nameInput').value.trim();
+        if (!seat || !name) { alert("학생 좌석번호와 이름을 먼저 입력해주세요."); showStartModal(); return; }
+        
+        // 정보 갱신 및 저장
+        localStorage.setItem('edenSeat', seat);
+        localStorage.setItem('edenName', name);
+
+        // 전송할 데이터 식별 로직 (미전송본 우선 전송)
+        let h = JSON.parse(localStorage.getItem('leitnerHistory') || '[]');
+        let targetIdx = h.findIndex(x => x.submitted === false);
+        
+        let dataToSend = sessionData;
+        let chapterToSend = document.getElementById('chapterSelect').value;
+
+        if (targetIdx > -1) {
+            chapterToSend = h[targetIdx].chapter;
+            dataToSend = h[targetIdx].data;
+            h[targetIdx].submitted = true;
+            localStorage.setItem('leitnerHistory', JSON.stringify(h));
+        } else {
+            if (!currentSessionId) {
+                alert("전송할 새로운 학습 기록이 없습니다.");
+                return;
+            }
+            let currIdx = h.findIndex(x => x.id === currentSessionId);
+            if (currIdx > -1) {
+                h[currIdx].submitted = true;
+                localStorage.setItem('leitnerHistory', JSON.stringify(h));
+                dataToSend = h[currIdx].data;
+                chapterToSend = h[currIdx].chapter;
+            }
+        }
+
+        const form = document.createElement("form");
+        form.action = GOOGLE_FORM_URL; form.method = "POST"; form.target = "hidden_iframe";
+        
+        const add = (n,v) => { const i = document.createElement("input"); i.type = "hidden"; i.name = n; i.value = v; form.appendChild(i); };
+        
+        add(ENTRY_IDS.seat, seat); add(ENTRY_IDS.name, name); add(ENTRY_IDS.chapter, chapterToSend);
+        add(ENTRY_IDS.time1, formatTimeKor(dataToSend.time1)); add(ENTRY_IDS.time2, formatTimeKor(dataToSend.time2));
+        add(ENTRY_IDS.time3, formatTimeKor(dataToSend.time3)); add(ENTRY_IDS.time4, formatTimeKor(dataToSend.time4));
+        
+        const wrongStr = dataToSend.wrongWords.map(w => `${w.word}|${w.meaning||w.단어}`).join('\n') || "없음";
+        add(ENTRY_IDS.wrongWords, wrongStr);
+        
+        document.body.appendChild(form); submitted = true; form.submit();
+        alert(`[${chapterToSend}] 단원의 학습 결과가 원장님께 정상적으로 전송 중입니다.`);
+        
+        currentSessionId = null;
+        sessionData = { time1: 0, time2: 0, time3: 0, time4: 0, p3Stats: { right: 0, mid: 0, left: 0 }, wrongWords: [] };
+
+        setTimeout(() => { if (document.body.contains(form)) document.body.removeChild(form); }, 1000);
+    }
+
+    function formatTimeKor(s) { if(!s||s===0) return "0초"; let m=Math.floor(s/60); return m>0 ? `${m}분 ${s%60}초` : `${s%60}초`; }
+
+    /* --- 타이머 제어 --- */
+    function startRealtimeStopwatch() {
+        clearInterval(globalStopwatch);
+        document.getElementById('stopwatchDisplay').style.display = 'block';
+        globalStopwatch = setInterval(() => {
+            if (mode === 1) sessionData.time1++; else if (mode === 2) sessionData.time2++; else if (mode === 3) sessionData.time3++; else if (mode === 4) sessionData.time4++;
+            let s = [0, sessionData.time1, sessionData.time2, sessionData.time3, sessionData.time4][mode];
+            document.getElementById('stopwatchDisplay').innerText = `⏱ ${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
+            updateSessionToStorage();
+        }, 1000);
+    }
+
+    function updateSessionToStorage() {
+        if (!currentSessionId) return;
+        let h = JSON.parse(localStorage.getItem('leitnerHistory') || '[]');
+        let i = h.findIndex(x => x.id === currentSessionId);
+        if (i > -1) { h[i].data = sessionData; localStorage.setItem('leitnerHistory', JSON.stringify(h)); }
+        if (sessionData.wrongWords.length > 0) localStorage.setItem('leitnerWrongWords', JSON.stringify(sessionData.wrongWords));
+    }
+
+    /* --- 🔥 다른 단원으로 변경 시 미전송 검사 로직 --- */
+    function handleChapterChange(e) {
+        let h = JSON.parse(localStorage.getItem('leitnerHistory') || '[]');
+        let unsubmitted = h.find(x => x.submitted === false);
+
+        if (unsubmitted && unsubmitted.chapter !== e.target.value) {
+            alert(`[${unsubmitted.chapter}] 단원의 학습 결과가 아직 전송되지 않았습니다.\n다른 단원을 학습하려면 먼저 [결과 전송]을 완료해주세요.`);
+            e.target.value = unsubmitted.chapter; // 선택을 강제로 되돌림
+            return;
+        }
+        
+        currentSessionId = null; 
+        showStartModal(); 
+    }
+
+    /* --- 앱 초기화 및 시작 --- */
+    function initApp(m, isNew = false) {
+        unlockAudio(); 
+        const seat = document.getElementById('seatInput').value.trim();
+        const name = document.getElementById('nameInput').value.trim();
+        if(!seat || !name) { alert("시작 전, 학생 좌석번호와 이름을 꼭 입력해주세요."); return; }
+        
+        const selectedCh = document.getElementById('chapterSelect').value;
+
+        // 🔥 이전 단원 결과 전송 여부 강제 확인 (안전장치)
+        let h = JSON.parse(localStorage.getItem('leitnerHistory') || '[]');
+        let unsubmitted = h.find(x => x.submitted === false && x.chapter !== selectedCh);
+        if (unsubmitted) {
+            alert(`[${unsubmitted.chapter}] 단원의 학습이 완료되지 않았거나 전송되지 않았습니다.\n다른 단원을 시작하기 전에 이전 단원의 [학습 결과 전송하기]를 완료해주세요.`);
+            document.getElementById('chapterSelect').value = unsubmitted.chapter;
+            return;
+        }
+
+        // 정보 자동 저장
+        localStorage.setItem('edenSeat', seat);
+        localStorage.setItem('edenName', name);
+
+        mode = m;
+        isEnToKo = document.querySelector('input[name="modalLang"]:checked').value === 'en2ko';
+        document.querySelector(`input[name="topLang"][value="${isEnToKo?'en2ko':'ko2en'}"]`).checked = true;
+
+        if (!currentSessionId) {
+            currentSessionId = Date.now();
+            sessionData = { time1: 0, time2: 0, time3: 0, time4: 0, p3Stats: { right: 0, mid: 0, left: 0 }, wrongWords: [] };
+            activeWordData = originalWordData.filter(item => item.chapter === selectedCh);
+            if (activeWordData.length === 0) activeWordData = [...originalWordData];
+            
+            const today = new Date();
+            const dateStr = `${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')} ${String(today.getHours()).padStart(2,'0')}:${String(today.getMinutes()).padStart(2,'0')}`;
+            
+            h.push({ 
+                id: currentSessionId, 
+                chapter: selectedCh, 
+                date: dateStr, 
+                data: sessionData, 
+                valid: true,
+                submitted: false 
+            });
+            localStorage.setItem('leitnerHistory', JSON.stringify(h));
+        }
+
+        pendingQueue = [...activeWordData]; 
+        boxes = { left: [], mid: [], right: [] }; 
+        if(mode === 2) currentCycle = 1;
+        
+        document.getElementById('modalOverlay').style.display = 'none';
+        
+        const titleEl = document.getElementById('modeTitle');
+        const dashEl = document.getElementById('mainDash');
+        const guideEl = document.getElementById('swipeInfoGuide');
+        const timerEl = document.getElementById('timerContainer');
+        const badgeEl = document.getElementById('cycleBadge');
+        const progressEl = document.getElementById('progressText');
+
+        if(mode === 1) {
+            titleEl.innerText = "1차 학습: 단어 익히기";
+            dashEl.classList.add('hidden');
+            guideEl.classList.add('hidden');
+            timerEl.style.display = 'none';
+            badgeEl.style.display = 'none';
+            document.getElementById('mainArea').className = 'main-area';
+            progressEl.className = 'progress-badge badge-default';
+        } else if(mode === 2) {
+            titleEl.innerText = "2차 학습: 분류 훈련";
+            dashEl.classList.remove('hidden');
+            guideEl.classList.remove('hidden');
+            timerEl.style.display = 'none';
+            badgeEl.style.display = 'block';
+            badgeEl.innerText = `${currentCycle}회독`;
+            badgeEl.className = `progress-badge badge-cycle-${currentCycle}`;
+            progressEl.className = `progress-badge badge-cycle-${currentCycle}`;
+            document.getElementById('mainArea').className = `main-area cycle-${currentCycle}`;
+        } else if(mode === 3) {
+            titleEl.innerText = "3차 학습: 실전 테스트!";
+            dashEl.classList.remove('hidden');
+            guideEl.classList.remove('hidden');
+            timerEl.style.display = 'block';
+            badgeEl.style.display = 'block';
+            badgeEl.innerText = '최종 테스트';
+            badgeEl.className = 'progress-badge badge-cycle-3';
+            progressEl.className = 'progress-badge badge-cycle-3';
+            document.getElementById('mainArea').className = 'main-area cycle-3';
+        }
+
+        startRealtimeStopwatch(); 
+        nextCard();
+    }
+
+    function startMode4() {
+        unlockAudio(); 
+        const seat = document.getElementById('seatInput').value.trim();
+        const name = document.getElementById('nameInput').value.trim();
+        if(!seat || !name) { alert("시작 전, 학생 좌석번호와 이름을 꼭 입력해주세요."); return; }
+        
+        const selectedCh = document.getElementById('chapterSelect').value;
+
+        // 🔥 이전 단원 결과 전송 여부 강제 확인 (안전장치)
+        let h = JSON.parse(localStorage.getItem('leitnerHistory') || '[]');
+        let unsubmitted = h.find(x => x.submitted === false && x.chapter !== selectedCh);
+        if (unsubmitted) {
+            alert(`[${unsubmitted.chapter}] 단원의 학습 결과가 아직 전송되지 않았습니다.\n다른 단원을 시작하기 전에 이전 단원의 [학습 결과 전송하기]를 완료해주세요.`);
+            document.getElementById('chapterSelect').value = unsubmitted.chapter;
+            return;
+        }
+
+        // 정보 자동 저장
+        localStorage.setItem('edenSeat', seat);
+        localStorage.setItem('edenName', name);
+
+        let savedWrongs = JSON.parse(localStorage.getItem('leitnerWrongWords') || '[]');
+        if (savedWrongs.length === 0) { alert("저장된 오답이 없습니다. 3차 실전 테스트를 먼저 진행하세요!"); return; }
+        
+        if (!currentSessionId) {
+            currentSessionId = Date.now();
+            sessionData = { time1: 0, time2: 0, time3: 0, time4: 0, p3Stats: { right: 0, mid: 0, left: 0 }, wrongWords: [] };
+        }
+
+        mode = 4; activeWordData = [...savedWrongs]; 
+        pendingQueue = [...activeWordData]; 
+        boxes = { left: [], mid: [], right: [] }; 
+        
+        document.getElementById('modalOverlay').style.display = 'none';
+        document.getElementById('modeTitle').innerText = "4차 학습: 오답 완벽 체화";
+        document.getElementById('mainDash').classList.remove('hidden');
+        document.getElementById('swipeInfoGuide').classList.remove('hidden');
+        document.getElementById('timerContainer').style.display = 'none';
+        
+        const badgeEl = document.getElementById('cycleBadge');
+        badgeEl.style.display = 'block';
+        badgeEl.innerText = '오답 복습';
+        badgeEl.className = 'progress-badge badge-cycle-4';
+        document.getElementById('progressText').className = 'progress-badge badge-cycle-4';
+        document.getElementById('mainArea').className = 'main-area cycle-4';
+
+        startRealtimeStopwatch(); 
+        nextCard();
+    }
+
+    /* --- 핵심 카드 교체 로직 --- */
+    function nextCard() {
+        isFlipped = false;
+        const c = document.getElementById('wordCard'), w = document.getElementById('swipeWrapper');
+        c.style.transition = 'none'; c.classList.remove('is-flipped');
+        w.style.transition = 'none'; w.style.opacity = '1'; w.style.transform = 'translate(0,0) rotate(0)';
+        
+        document.getElementById('frontGuide').innerText = "터치하여 확인";
+        document.getElementById('backGuide').innerText = "밀어서 분류하세요";
+
+        setTimeout(() => { c.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)'; w.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s'; }, 50);
+        clearInterval(timer3Sec);
+        
+        if (pendingQueue.length === 0) {
+            return showSummary();
+        }
+        currentWord = pendingQueue.shift();
+        
+        updateUI();
+        
+        if (isEnToKo) speak(currentWord.word);
+        
+        if (mode === 3) start3Timer();
+    }
+
+    function updateUI() {
+        if (!currentWord) return;
+        const f = document.getElementById('frontText'), b = document.getElementById('backText'), m = currentWord.meaning || currentWord.단어;
+        const mult = parseFloat(document.getElementById('fontSizeLevel').value);
+        
+        const setFont = (el, txt, isKo) => {
+            el.innerText = txt; let size = isKo ? 34 * mult : 42 * mult; el.style.fontSize = size + "px";
+            while ((el.scrollWidth > el.parentElement.clientWidth || el.scrollHeight > el.parentElement.clientHeight) && size > 12) { size--; el.style.fontSize = size + "px"; }
+        };
+        
+        if (isEnToKo) { 
+            f.className = "word-text en-text"; b.className = "word-text ko-text";
+            setFont(f, currentWord.word, false); setFont(b, m, true); 
+        } else { 
+            f.className = "word-text ko-text"; b.className = "word-text en-text";
+            setFont(f, m, true); setFont(b, currentWord.word, false); 
+        }
+        
+        const totalCount = activeWordData.length;
+        if (mode === 1) {
+            document.getElementById('progressText').innerText = `진행: ${totalCount - pendingQueue.length} / ${totalCount}`;
+        } else {
+            document.getElementById('progressText').innerText = `완료: ${boxes.right.length} / ${totalCount}`;
+        }
+        
+        document.getElementById('cntLeft').innerText = boxes.left.length;
+        document.getElementById('cntMid').innerText = boxes.mid.length;
+        document.getElementById('cntRight').innerText = boxes.right.length;
+    }
+
+    /* --- 결산 및 라운드 재개 --- */
+    function showSummary() {
+        clearInterval(globalStopwatch); updateSessionToStorage();
+        document.getElementById('modalOverlay').style.display = 'flex';
+        const m = document.getElementById('resultModal'); m.classList.remove('hidden');
+        document.getElementById('startModal').classList.add('hidden');
+        document.getElementById('historyModal').classList.add('hidden');
+        
+        document.getElementById('resLeft').innerText = boxes.left.length;
+        document.getElementById('resMid').innerText = boxes.mid.length;
+        document.getElementById('resRight').innerText = boxes.right.length;
+        const btns = document.getElementById('resultActionBtns');
+
+        if (mode === 1) {
+            document.getElementById('resultTitle').innerText = "1차 학습 완료!";
+            document.getElementById('resultMsg').innerText = "단어를 모두 훑어보았습니다.";
+            btns.innerHTML = `<button class="btn-main btn-blue" onclick="initApp(1)">다시 연습하기</button><button class="btn-main btn-orange" onclick="initApp(2)">2차 학습 시작하기</button>`;
+        } else if (mode === 4) {
+            if (boxes.right.length === activeWordData.length) {
+                document.getElementById('resultTitle').innerText = "오답 정복 완료!"; document.getElementById('resultMsg').innerText = "틀렸던 단어를 모두 암기했습니다!";
+                btns.innerHTML = `<button class="btn-main btn-gray" onclick="showStartModal()">메뉴로 가기</button>`; localStorage.removeItem('leitnerWrongWords'); 
+            } else {
+                document.getElementById('resultTitle').innerText = "라운드 정리"; document.getElementById('resultMsg').innerText = "남은 오답 카드를 다시 훈련합니다.";
+                btns.innerHTML = `<button class="btn-main btn-blue" onclick="resumeRound()">다음 라운드 진행</button>`;
+            }
+        } else {
+            if (boxes.right.length === activeWordData.length) {
+                if (mode === 2 && currentCycle < 3) {
+                    document.getElementById('resultTitle').innerText = `${currentCycle}회독 완료!`; document.getElementById('resultMsg').innerText = `이어서 ${currentCycle + 1}회독을 진행합니다.`;
+                    btns.innerHTML = `<button class="btn-main btn-orange" onclick="startNextCycle()">다음 회독 시작</button>`;
+                } else if (mode === 2 && currentCycle === 3) {
+                    document.getElementById('resultTitle').innerText = "2차 학습 완료!"; document.getElementById('resultMsg').innerText = `모든 분류가 끝났습니다. 실전 테스트로 이동하세요.`;
+                    btns.innerHTML = `<button class="btn-main btn-green" onclick="initApp(3)">3차 테스트 시작</button>`;
+                } else {
+                    document.getElementById('resultTitle').innerText = "최종 테스트 통과!"; document.getElementById('resultMsg').innerHTML = `수고하셨습니다!<br>틀린 문제는 '4차 학습'에 저장되었습니다.`;
+                    btns.innerHTML = `<button class="btn-main btn-gray" onclick="showStartModal()">메뉴로 가기</button>`;
+                }
+            } else {
+                document.getElementById('resultTitle').innerText = "라운드 정리"; document.getElementById('resultMsg').innerText = "남은 카드를 다시 훈련합니다.";
+                btns.innerHTML = `<button class="btn-main btn-blue" onclick="resumeRound()">다음 라운드 진행</button>`;
+            }
+        }
+    }
+
+    function resumeRound() {
+        document.getElementById('modalOverlay').style.display = 'none';
+        pendingQueue = [...boxes.left, ...boxes.mid];
+        boxes.left = []; boxes.mid = [];
+        startRealtimeStopwatch(); nextCard();
+    }
+
+    function startNextCycle() {
+        document.getElementById('modalOverlay').style.display = 'none'; currentCycle++;
+        const badgeEl = document.getElementById('cycleBadge');
+        badgeEl.innerText = `${currentCycle}회독`; badgeEl.className = `progress-badge badge-cycle-${currentCycle}`;
+        document.getElementById('progressText').className = `progress-badge badge-cycle-${currentCycle}`;
+        document.getElementById('mainArea').className = `main-area cycle-${currentCycle}`;
+        
+        pendingQueue = [...activeWordData]; 
+        boxes = { left: [], mid: [], right: [] };
+        startRealtimeStopwatch(); nextCard();
+    }
+
+    /* ====== 🔥 엑셀(CSV) 업로드 ====== */
+    function triggerCsvUpload() { document.getElementById('csvFileInput').click(); }
+    
+    function handleCsvUpload(ev) {
+        const f = ev.target.files[0]; if(!f) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const buffer = e.target.result;
+            const utf8Text = new TextDecoder('utf-8').decode(buffer);
+            const eucKrText = new TextDecoder('euc-kr').decode(buffer);
+            const utf8Match = (utf8Text.match(/[가-힣]/g) || []).length;
+            const eucKrMatch = (eucKrText.match(/[가-힣]/g) || []).length;
+            parseCSVText((eucKrMatch > utf8Match) ? eucKrText : utf8Text);
+        };
+        reader.readAsArrayBuffer(f);
+        ev.target.value = ''; 
+    }
+
+    function parseCSVText(text) {
+        text = text.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        const rows = text.split('\n');
+        const data = [];
+        for(let i=0; i<rows.length; i++){
+            let row = rows[i].trim(); if(!row) continue;
+            const c = []; let curr = '', inQ = false;
+            for(let j=0; j<row.length; j++) {
+                if(row[j]==='"') inQ = !inQ; else if(row[j]===',' && !inQ) { c.push(curr); curr=''; } else curr += row[j];
+            }
+            c.push(curr);
+            if(c.length>=3){
+                let ch=c[0].trim().replace(/^"|"$/g, ''), wo=c[1].trim().replace(/^"|"$/g, ''), me=c.slice(2).join(',').trim().replace(/^"|"$/g, '');
+                if(i===0 && (ch.includes('단원')||wo.includes('단어'))) continue; 
+                if(ch && wo && me) data.push({chapter:ch, word:wo, meaning:me});
+            }
+        }
+        if(data.length>0){
+            originalWordData = data;
+            
+            // 🔥 업로드 시 자동 복원
+            let currentVal = document.getElementById('chapterSelect').value;
+            const chs = [...new Set(data.map(x=>x.chapter))];
+            const sel = document.getElementById('chapterSelect'); sel.innerHTML = '';
+            chs.forEach(x=>{ let o=document.createElement('option'); o.value=x; o.text=x; sel.appendChild(o); });
+            
+            let h = JSON.parse(localStorage.getItem('leitnerHistory') || '[]');
+            let unsubmitted = h.find(x => x.submitted === false);
+            if (unsubmitted && chs.includes(unsubmitted.chapter)) {
+                sel.value = unsubmitted.chapter;
+            } else if (chs.includes(currentVal)) {
+                sel.value = currentVal;
+            }
+
+            document.getElementById('genFileBtn').disabled = false;
+            document.getElementById('genFileBtn').style.opacity = "1";
+            document.getElementById('uploadStatus').innerText = `${data.length}개 단어 준비 완료!`;
+            alert("업로드 성공! 이제 교재명을 입력하고 파일 제작 버튼을 누르세요.");
+        } else { alert("올바른 형식이 아닙니다."); }
+    }
+
+    /* --- 부가 메뉴 관리 --- */
+    function showStartModal() { 
+        clearInterval(globalStopwatch);
+        document.getElementById('modalOverlay').style.display = 'flex';
+        document.getElementById('resultModal').classList.add('hidden');
+        document.getElementById('historyModal').classList.add('hidden');
+        document.getElementById('guideModal').classList.add('hidden');
+
+        // 🔥 학생 배포용 화면 단원 복원 로직
+        let currentVal = document.getElementById('chapterSelect').value;
+        const chs = [...new Set(originalWordData.map(x=>x.chapter))];
+        const sel = document.getElementById('chapterSelect'); sel.innerHTML = '';
+        chs.forEach(x=>{ let o=document.createElement('option'); o.value=x; o.text=x; sel.appendChild(o); });
+        
+        let h = JSON.parse(localStorage.getItem('leitnerHistory') || '[]');
+        let unsubmitted = h.find(x => x.submitted === false);
+        if (unsubmitted && chs.includes(unsubmitted.chapter)) {
+            sel.value = unsubmitted.chapter;
+        } else if (chs.includes(currentVal)) {
+            sel.value = currentVal;
+        }
+
+        if (IS_STUDENT_VERSION) {
+            document.getElementById('adminModal').classList.add('hidden');
+            document.getElementById('startModal').classList.remove('hidden');
+            document.getElementById('studentBookTitle').innerText = textbookName;
+        } else {
+            document.getElementById('adminModal').classList.remove('hidden');
+            document.getElementById('startModal').classList.add('hidden');
+        }
+    }
+
+    function showGuideModal() {
+        document.getElementById('startModal').classList.add('hidden');
+        document.getElementById('guideModal').classList.remove('hidden');
+    }
+    
+    function closeGuideModal() {
+        document.getElementById('guideModal').classList.add('hidden');
+        document.getElementById('startModal').classList.remove('hidden');
+    }
+
+    function showHistory() {
+        clearInterval(globalStopwatch); updateSessionToStorage();
+        document.getElementById('modalOverlay').style.display = 'flex';
+        document.getElementById('historyModal').classList.remove('hidden');
+        document.getElementById('startModal').classList.add('hidden');
+        document.getElementById('resultModal').classList.add('hidden');
+        document.getElementById('adminModal').classList.add('hidden');
+        document.getElementById('guideModal').classList.add('hidden');
+        
+        const list = document.getElementById('historyList'); list.innerHTML = '';
+        const history = JSON.parse(localStorage.getItem('leitnerHistory') || '[]');
+        if (history.length === 0) { list.innerHTML = '<tr><td colspan="7" style="padding:20px;">학습 기록이 없습니다.</td></tr>'; return; }
+
+        history.reverse().forEach(r => {
+            const d = r.data, t = d.time1 + d.time2 + d.time3 + d.time4;
+            const w = d.wrongWords.map(x => `<b>${x.word}</b> | ${x.meaning || x.단어}`).join('<br>') || '-';
+            list.innerHTML += `<tr style="border-bottom:1px solid #eee"><td>${r.chapter}<br><span style="font-size:10px;color:#999;">${r.date.split(' ')[1]||''}</span></td><td>${formatTimeKor(d.time1)}</td><td>${formatTimeKor(d.time2)}</td><td>${formatTimeKor(d.time3)}</td><td>${formatTimeKor(d.time4)}</td><td style="font-weight:bold; color:#e74c3c;">${formatTimeKor(t)}</td><td class="wrong-words-cell">${w}</td></tr>`;
+        });
+    }
+
+    function closeHistory() { document.getElementById('historyModal').classList.add('hidden'); showStartModal(); }
+    function syncLangAndUpdate() { isEnToKo = document.querySelector('input[name="topLang"]:checked').value === 'en2ko'; document.querySelector(`input[name="modalLang"][value="${isEnToKo?'en2ko':'ko2en'}"]`).checked = true; updateUI(); }
+    function clearAllHistory() { if(confirm("모든 기록을 삭제합니다.")) { localStorage.removeItem('leitnerHistory'); localStorage.removeItem('leitnerWrongWords'); alert("초기화되었습니다."); showHistory(); } }
+    
+    function exportToCSV() {
+        let history = JSON.parse(localStorage.getItem('leitnerHistory') || '[]');
+        if (history.length === 0) { alert("기록이 없습니다."); return; }
+        let csvContent = "\uFEFF학습일시,단원,1차 소요시간,2차 소요시간,3차 소요시간,4차 소요시간,총 소요시간,오답노트\n";
+        history.forEach(r => {
+            let d = r.data, t = d.time1 + d.time2 + d.time3 + d.time4, w = d.wrongWords.map(w => `${w.word}|${w.meaning || w.단어}`).join(' / ');
+            csvContent += `"${r.date}","${r.chapter}","${formatTimeKor(d.time1)}","${formatTimeKor(d.time2)}","${formatTimeKor(d.time3)}","${formatTimeKor(d.time4)}","${formatTimeKor(t)}","${w}"\n`;
+        });
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "학습기록.csv"; link.click();
+    }
+
+    /* --- 🔥 터치 제어 --- */
+    function start3Timer() {
+        let r=3000; const b=document.getElementById('timerBar'); b.style.transition='none'; b.style.width='100%';
+        setTimeout(()=>{b.style.transition='width 3s linear'; b.style.width='0%';},50);
+        timer3Sec = setInterval(()=>{r-=100; if(r<=0){clearInterval(timer3Sec); speak("Time over"); if(!isFlipped)flipCard(); setTimeout(()=>fly('left'),1000);}},100);
+    }
+
+    const swipeWrap = document.getElementById('swipeWrapper');
+    let isDragging = false, startX = 0, startY = 0, curX = 0, curY = 0;
+    
+    swipeWrap.addEventListener('pointerdown', e => { 
+        if (isAnimating) return; 
+        isDragging = true; startX = e.clientX; startY = e.clientY; 
+        curX = 0; curY = 0;
+        swipeWrap.style.transition = 'none'; swipeWrap.setPointerCapture(e.pointerId); 
+    });
+    
+    swipeWrap.addEventListener('pointermove', e => { 
+        if (!isDragging || isAnimating || (!isFlipped && mode !== 1)) return; 
+        curX = e.clientX - startX; curY = e.clientY - startY; 
+        swipeWrap.style.transform = `translate(${curX}px, ${curY}px) rotate(${curX * 0.05}deg)`; 
+    });
+    
+    swipeWrap.addEventListener('pointerup', e => {
+        if (!isDragging || isAnimating) return; 
+        isDragging = false; swipeWrap.releasePointerCapture(e.pointerId);
+        
+        const dist = Math.hypot(curX, curY);
+        if (dist < 15) { 
+            if (!isFlipped) flipCard(); 
+            else if (mode === 1) fly('left'); 
+            return; 
+        }
+        
+        if (mode === 1) fly('left'); 
+        else if (!isFlipped) { swipeWrap.style.transition='0.3s'; swipeWrap.style.transform='translate(0,0)'; }
+        else if (curX > 80) fly('right'); 
+        else if (curX < -80) fly('left'); 
+        else if (curY < -80) fly('mid'); 
+        else { swipeWrap.style.transition='0.3s'; swipeWrap.style.transform='translate(0,0)'; }
+    });
+
+    function flipCard() { 
+        isFlipped = true; 
+        document.getElementById('wordCard').classList.add('is-flipped'); 
+        if (mode === 1) document.getElementById('frontGuide').innerText = "밀어서 다음 단어로";
+        if (!isEnToKo) speak(currentWord.word); 
+    }
+    
+    function fly(dir) {
+        if (isAnimating) return;
+        isAnimating = true; 
+        clearInterval(timer3Sec);
+        
+        if (mode === 3 || mode === 4) { 
+            if (dir === 'right') sessionData.p3Stats.right++; else if (dir === 'mid') sessionData.p3Stats.mid++; else sessionData.p3Stats.left++;
+            if (dir !== 'right' && !sessionData.wrongWords.some(x => x.word === currentWord.word)) {
+                sessionData.wrongWords.push({...currentWord});
+            }
+        }
+        
+        if (dir === 'right') boxes.right.push(currentWord); else if (dir === 'left') boxes.left.push(currentWord); else boxes.mid.push(currentWord);
+        
+        swipeWrap.style.transition = 'transform 0.4s ease-out, opacity 0.3s'; 
+        swipeWrap.style.opacity = '0';
+        let tx = (dir==='right'?500:(dir==='left'?-500:0)), ty = (dir==='mid'?-600:0);
+        swipeWrap.style.transform = `translate(${tx}px, ${ty}px) rotate(${tx*0.1}deg)`;
+        
+        setTimeout(() => {
+            try { nextCard(); } catch(e) { console.error(e); } finally { isAnimating = false; }
+        }, 350);
+    }
+
+</script>
+
+</body></html>
